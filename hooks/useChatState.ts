@@ -49,7 +49,7 @@ export function useChatState() {
                 id: c.id,
                 title: c.title,
                 date: new Date(c.updated_at).toLocaleDateString(),
-                messages: [] // We load messages on demand
+                messages: [] as any[] // We load messages on demand
             }));
             
             // Merge with local (avoid duplicates by ID)

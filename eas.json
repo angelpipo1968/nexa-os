@@ -1,0 +1,16 @@
+{
+  "build": {
+    "production": {
+      "channel": "production",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "API_URL": "https://www.nexa-ai.dev/api"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

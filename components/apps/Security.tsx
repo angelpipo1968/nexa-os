@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Shield, Lock, CheckCircle, AlertTriangle, RefreshCw, Eye, EyeOff, Activity, Server, Wifi, FileCheck, FileWarning, Upload } from 'lucide-react';
+import AuthTest from '../AuthTest';
 
 interface SecurityProps {
   isOpen: boolean;
@@ -173,6 +174,10 @@ export default function Security({ isOpen, onClose }: SecurityProps) {
             </div>
 
             {/* File Scanner Section */}
+            <div className="mb-6">
+                <AuthTest />
+            </div>
+
             <div className="mb-6 p-4 border border-gray-100 rounded-xl bg-gray-50/50">
                 <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-2">
                     <FileCheck className="w-4 h-4" />

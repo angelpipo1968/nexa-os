@@ -64,7 +64,8 @@ export default function WebDev({ isOpen, onClose, onInsert }: WebDevProps) {
   // Efecto de generación de código real
   const generateCode = async (prompt: string) => {
     try {
-      const response = await fetch('/api/chat', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/chat` : '/api/chat';
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

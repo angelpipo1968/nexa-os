@@ -17,9 +17,15 @@
     "@anthropic-ai/sdk": "^0.20.9",
     "@capacitor/android": "^6.2.1",
     "@capacitor/core": "^6.0.0",
+    "@capacitor/preferences": "^6.0.4",
+    "@expo/server": "^0.7.5",
     "@google/generative-ai": "^0.24.1",
     "@supabase/supabase-js": "^2.89.0",
+    "capacitor-native-biometric": "^4.2.2",
+    "capacitor-secure-storage-plugin": "^0.10.0",
     "dotenv": "^17.2.3",
+    "eas-cli": "^16.28.0",
+    "express": "^5.2.1",
     "firebase": "^12.7.0",
     "jszip": "^3.10.1",
     "lucide-react": "^0.263.1",
@@ -32,6 +38,7 @@
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^6.0.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",

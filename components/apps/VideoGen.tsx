@@ -126,7 +126,8 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
                     formData.append('apiKey', minimaxKey);
                 }
 
-                const response = await fetch('/api/generate-video', {
+                const apiUrl = process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/generate-video` : '/api/generate-video';
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     body: formData,
                 });

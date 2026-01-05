@@ -113,23 +113,16 @@ class SimpleSupabaseClient {
             const data = await response.json();
             return { data: Array.isArray(data) ? (data[0] || null) : null, error: null };
           },
-          order: (orderColumn: string, { ascending = true } = {}) => ({
-             // Simplificado para devolver la promesa directamente si se desea
-             then: (resolve: any, reject: any) => {
-               this.request(`/${table}?select=${columns}&${column}=eq.${value}&order=${orderColumn}.${ascending ? 'asc' : 'desc'}`)
-                 .then(data => resolve({ data, error: null }))
-                 .catch(error => resolve({ data: null, error }));
-             }
-          })
+          order: (orderColumn: string, { ascending = true } = {}) => 
+             this.request(`/${table}?select=${columns}&${column}=eq.${value}&order=${orderColumn}.${ascending ? 'asc' : 'desc'}`)
+               .then(data => ({ data, error: null }))
+               .catch(error => ({ data: null, error }))
         }),
         // Soporte básico para select sin filtros
-        order: (column: string, { ascending = true } = {}) => ({
-             then: (resolve: any, reject: any) => {
-               this.request(`/${table}?select=${columns}&order=${column}.${ascending ? 'asc' : 'desc'}`)
-                 .then(data => resolve({ data, error: null }))
-                 .catch(error => resolve({ data: null, error }));
-             }
-        })
+        order: (column: string, { ascending = true } = {}) => 
+             this.request(`/${table}?select=${columns}&order=${column}.${ascending ? 'asc' : 'desc'}`)
+               .then(data => ({ data, error: null }))
+               .catch(error => ({ data: null, error }))
       }),
       insert: (values: any) => ({
         select: () => ({
@@ -145,36 +138,30 @@ class SimpleSupabaseClient {
         })
       }),
       update: (values: any) => ({
-        eq: (column: string, value: any) => ({
-             then: (resolve: any, reject: any) => {
-               fetch(`${this.url}/rest/v1/${table}?${column}=eq.${value}`, {
+        eq: (column: string, value: any) => 
+             fetch(`${this.url}/rest/v1/${table}?${column}=eq.${value}`, {
                  method: 'PATCH',
                  headers: getHeaders(),
                  body: JSON.stringify(values)
-               })
-               .then(res => res.json())
-               .then(data => resolve({ data, error: null }))
-               .catch(error => resolve({ data: null, error }));
-             }
-        })
+             })
+             .then(res => res.json())
+             .then(data => ({ data, error: null }))
+             .catch(error => ({ data: null, error }))
       }),
       delete: () => ({
-        eq: (column: string, value: any) => ({
-             then: (resolve: any, reject: any) => {
-               fetch(`${this.url}/rest/v1/${table}?${column}=eq.${value}`, {
+        eq: (column: string, value: any) => 
+             fetch(`${this.url}/rest/v1/${table}?${column}=eq.${value}`, {
                  method: 'DELETE',
                  headers: getHeaders()
-               })
-               .then(async res => {
-                   if (res.ok) resolve({ data: true, error: null });
-                   else {
-                       const err = await res.json().catch(() => ({ message: res.statusText }));
-                       resolve({ data: null, error: err });
-                   }
-               })
-               .catch(error => resolve({ data: null, error }));
-             }
-        })
+             })
+             .then(async res => {
+                 if (res.ok) return { data: true, error: null };
+                 else {
+                     const err = await res.json().catch(() => ({ message: res.statusText }));
+                     return { data: null, error: err };
+                 }
+             })
+             .catch(error => ({ data: null, error }))
       })
     };
   }
@@ -315,14 +302,13 @@ export default function NEXACompleteSetup() {
     if (isConfigured && supabaseRef.current) {
         // Buscar conversación existente
         if (!chatId) {
-            const { data: existingConv } = await supabaseRef.current.from('conversations')
+            const { data: existingConvs } = await supabaseRef.current.from('conversations')
                 .select('id')
                 .eq('user_id', userId)
-                .order('updated_at', { ascending: false })
-                .single();
+                .order('updated_at', { ascending: false });
                 
-            if (existingConv) {
-                chatId = existingConv.id;
+            if (existingConvs && existingConvs.length > 0) {
+                chatId = existingConvs[0].id;
             } else {
                 // Crear nueva
                 const { data: newConv } = await supabaseRef.current.from('conversations')
@@ -441,36 +427,29 @@ export default function NEXACompleteSetup() {
     }
   };
 
-  // Simular login
-  const handleSignIn = async (email: string, password: string) => {
+  const handleSignIn = async (email: string, pass: string) => {
     setLoading(true);
     setError('');
 
+    // Fallback automático a modo invitado si no hay servidor configurado
+    if (!isConfigured) {
+        setTimeout(() => {
+            setUser({ id: 'guest', email: email, user_metadata: { name: 'Invitado' } });
+            setCurrentView('chat');
+            initializeChat('guest');
+            setLoading(false);
+        }, 800);
+        return;
+    }
+
     try {
-      if (isConfigured && supabaseRef.current) {
-        // Usar Supabase real
-        const { data, error } = await supabaseRef.current.auth.signIn(email, password);
-        if (error) throw error;
-        
-        const userData = data.user || data;
-        setUser(userData);
-        setCurrentView('chat');
-        initializeChat(userData.id);
-      } else {
-        // Modo demo/local
-        const foundUser = localDB.users.find((u: any) => u.email === email);
-        if (foundUser) {
-          setUser(foundUser);
-          setCurrentView('chat');
-          initializeChat('local');
-          // En local, "loadUserMessages" está implícito en initializeChat/useEffect
-          // Pero si queremos ser explícitos:
-          const userMessages = localDB.messages.filter((m: any) => m.user_id === foundUser.id || m.user_id === 'system');
-          if (userMessages.length > 0) setMessages(userMessages);
-        } else {
-          throw new Error('Usuario no encontrado');
-        }
-      }
+      const { data, error } = await supabaseRef.current!.auth.signIn(email, pass);
+      if (error) throw error;
+      
+      const userData = data.user || data;
+      setUser(userData);
+      setCurrentView('chat');
+      initializeChat(userData.id);
     } catch (err: any) {
       setError(err.message || 'Error en el login');
     } finally {
@@ -784,6 +763,20 @@ CREATE TABLE messages (
                 </svg>
                 Google
               </button>
+
+              {!isConfigured && (
+                  <button
+                    onClick={() => {
+                        setUser({ id: 'guest', email: 'guest@local', user_metadata: { name: 'Invitado' } });
+                        setCurrentView('chat');
+                        initializeChat('guest');
+                    }}
+                    className="w-full py-3 mt-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-lg font-medium transition-colors shadow-lg flex items-center justify-center gap-2 border border-gray-600"
+                  >
+                    <User className="w-5 h-5" />
+                    Entrar como Invitado (Offline)
+                  </button>
+              )}
 
               <div className="text-center pt-2">
                 <button

@@ -1,0 +1,11 @@
+<svg width="2732" height="2732" viewBox="0 0 2732 2732" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="2732" height="2732" fill="#020617"/>
+  <path d="M1166 1066L1566 1466M1566 1066L1166 1466" stroke="url(#paint0_linear)" stroke-width="120" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1366" y="1800" font-family="Arial, sans-serif" font-weight="bold" font-size="200" fill="white" text-anchor="middle" letter-spacing="20">NEXA OS</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="1166" y1="1066" x2="1566" y2="1466" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#06B6D4"/>
+      <stop offset="1" stop-color="#A855F7"/>
+    </linearGradient>
+  </defs>
+</svg>
