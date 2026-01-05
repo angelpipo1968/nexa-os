@@ -1,0 +1,48 @@
+es-ES:
+Novedades de NEXA OS 2.0 (Versión Alpha):
+
+🚀 Arquitectura Modular
+- Nuevo sistema de aplicaciones dinámico.
+- Carga bajo demanda para mayor rendimiento.
+
+🧠 Memoria Neuronal (Beta)
+- El sistema ahora "recuerda" conversaciones pasadas.
+- Persistencia de datos local segura.
+
+🛡️ Seguridad Avanzada
+- Nuevo módulo de escaneo de sistema.
+- Protección por PIN simulada.
+
+🎨 Interfaz Evolutiva
+- Diseño minimalista que se adapta a cualquier pantalla.
+- Nuevos efectos visuales y transiciones.
+
+🛠️ Herramientas Integradas
+- Image Studio: Generación de rostros artificiales únicos.
+- Video Gen: Optimización automática de prompts.
+- Base de Conocimientos: Recomendaciones de herramientas IA en tiempo real.
+
+---
+en-US:
+What's New in NEXA OS 2.0 (Alpha Release):
+
+🚀 Modular Architecture
+- New dynamic app system.
+- On-demand loading for better performance.
+
+🧠 Neural Memory (Beta)
+- System now "remembers" past conversations.
+- Secure local data persistence.
+
+🛡️ Advanced Security
+- New system scan module.
+- Simulated PIN protection.
+
+🎨 Evolutionary Interface
+- Minimalist design adapting to any screen.
+- New visual effects and transitions.
+
+🛠️ Integrated Tools
+- Image Studio: Unique artificial face generation.
+- Video Gen: Automatic prompt optimization.
+- Knowledge Base: Real-time AI tool recommendations.

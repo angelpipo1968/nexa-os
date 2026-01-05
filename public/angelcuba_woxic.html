@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANGELCUBA WOXIC | Consultoría Estratégica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            navy: '#0f172a',
+                            gold: '#cca43b',
+                            gray: '#f3f4f6',
+                            text: '#374151'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; color: #374151; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    <!-- Top Bar -->
+    <div class="bg-brand-navy text-white py-2 px-4 text-xs tracking-wider">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <span>Global Business Solutions • Est. 2024</span>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-brand-gold transition-colors">Noticias</a>
+                <a href="#" class="hover:text-brand-gold transition-colors">Carreras</a>
+                <a href="#" class="hover:text-brand-gold transition-colors">Portal Cliente</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50 transition-all duration-300 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-brand-navy text-brand-gold flex items-center justify-center font-serif font-bold text-xl rounded-sm">A</div>
+                    <span class="text-2xl font-serif font-bold text-brand-navy tracking-tight">ANGELCUBA<span class="text-brand-gold">WOXIC</span></span>
+                </div>
+                <div class="hidden md:flex items-center space-x-10">
+                    <a href="#about" class="text-gray-600 hover:text-brand-navy font-medium transition-colors">Nuestra Firma</a>
+                    <a href="#services" class="text-gray-600 hover:text-brand-navy font-medium transition-colors">Servicios</a>
+                    <a href="#insights" class="text-gray-600 hover:text-brand-navy font-medium transition-colors">Insights</a>
+                    <a href="#contact" class="px-6 py-2.5 bg-brand-navy text-white font-medium rounded-sm hover:bg-slate-800 transition-all shadow-md hover:shadow-lg">
+                        Contactar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-[85vh] flex items-center bg-brand-gray overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop" class="w-full h-full object-cover opacity-10" alt="Corporate Office">
+            <div class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="max-w-2xl fade-in-up">
+                <span class="text-brand-gold font-bold tracking-widest uppercase text-sm mb-4 block">Consultoría Estratégica Global</span>
+                <h1 class="text-5xl md:text-7xl font-bold text-brand-navy mb-8 leading-tight">
+                    Elevando el <br/>
+                    <span class="text-brand-gold italic">Potencial</span> Empresarial.
+                </h1>
+                <p class="text-xl text-gray-600 mb-10 leading-relaxed font-light">
+                    Transformamos organizaciones complejas en líderes ágiles del mercado mediante estrategias basadas en datos y excelencia operativa.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button class="px-8 py-4 bg-brand-navy text-white font-semibold rounded-sm hover:bg-slate-800 transition-all shadow-lg flex items-center justify-center gap-2">
+                        Nuestras Soluciones
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </button>
+                    <button class="px-8 py-4 bg-white text-brand-navy border border-brand-navy font-semibold rounded-sm hover:bg-gray-50 transition-all flex items-center justify-center">
+                        Ver Casos de Éxito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <div class="bg-brand-navy py-12 text-white border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/10">
+                <div>
+                    <div class="text-4xl font-serif font-bold text-brand-gold mb-1">15+</div>
+                    <div class="text-sm text-gray-400 uppercase tracking-wide">Años de Experiencia</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-serif font-bold text-brand-gold mb-1">200+</div>
+                    <div class="text-sm text-gray-400 uppercase tracking-wide">Proyectos Globales</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-serif font-bold text-brand-gold mb-1">$50M</div>
+                    <div class="text-sm text-gray-400 uppercase tracking-wide">Valor Generado</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-serif font-bold text-brand-gold mb-1">24/7</div>
+                    <div class="text-sm text-gray-400 uppercase tracking-wide">Soporte Estratégico</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl font-bold text-brand-navy mb-4">Excelencia en Cada Decisión</h2>
+                <div class="w-20 h-1 bg-brand-gold mx-auto mb-6"></div>
+                <p class="text-lg text-gray-600">Ofrecemos un enfoque integral para resolver los desafíos más críticos de su negocio.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Service 1 -->
+                <div class="group p-8 bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-sm">
+                    <div class="w-14 h-14 bg-brand-gray rounded-sm flex items-center justify-center mb-6 text-brand-navy group-hover:bg-brand-navy group-hover:text-white transition-colors">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy mb-3">Consultoría Financiera</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">Optimización de flujos de capital y estrategias de inversión para maximizar el retorno sostenible.</p>
+                    <a href="#" class="text-brand-navy font-semibold text-sm border-b border-brand-gold pb-0.5 hover:text-brand-gold transition-colors">Leer más</a>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="group p-8 bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-sm">
+                    <div class="w-14 h-14 bg-brand-gray rounded-sm flex items-center justify-center mb-6 text-brand-navy group-hover:bg-brand-navy group-hover:text-white transition-colors">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy mb-3">Transformación Digital</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">Modernización de infraestructuras tecnológicas para impulsar la eficiencia y la innovación.</p>
+                    <a href="#" class="text-brand-navy font-semibold text-sm border-b border-brand-gold pb-0.5 hover:text-brand-gold transition-colors">Leer más</a>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="group p-8 bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-sm">
+                    <div class="w-14 h-14 bg-brand-gray rounded-sm flex items-center justify-center mb-6 text-brand-navy group-hover:bg-brand-navy group-hover:text-white transition-colors">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy mb-3">Capital Humano</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">Desarrollo de liderazgo y gestión del talento para construir equipos de alto rendimiento.</p>
+                    <a href="#" class="text-brand-navy font-semibold text-sm border-b border-brand-gold pb-0.5 hover:text-brand-gold transition-colors">Leer más</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section with Image -->
+    <section id="about" class="py-24 bg-brand-gray relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <div class="absolute -top-4 -left-4 w-24 h-24 bg-brand-gold/20 z-0"></div>
+                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2232&auto=format&fit=crop" alt="Meeting" class="relative z-10 w-full rounded-sm shadow-2xl grayscale hover:grayscale-0 transition-all duration-700">
+                    <div class="absolute -bottom-6 -right-6 bg-white p-6 shadow-xl max-w-xs hidden md:block z-20">
+                        <p class="text-brand-navy font-serif italic text-lg">"La visión sin ejecución es solo una alucinación."</p>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-4xl font-bold text-brand-navy mb-6">Nuestra Firma</h2>
+                    <p class="text-gray-600 mb-6 text-lg leading-relaxed">
+                        En AngelCuba Woxic, no solo somos consultores; somos arquitectos del crecimiento. Fundada con la premisa de que cada desafío empresarial es único, nuestra firma se dedica a diseñar soluciones a medida.
+                    </p>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        Nuestro equipo multidisciplinario combina experiencia en gestión, tecnología y finanzas para ofrecer una perspectiva holística que garantiza resultados tangibles y sostenibles a largo plazo.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-brand-gold" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            <span class="text-gray-700 font-medium">Metodología Ágil y Probada</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-brand-gold" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            <span class="text-gray-700 font-medium">Alcance Internacional</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-brand-gold" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            <span class="text-gray-700 font-medium">Compromiso Ético</span>
+                        </li>
+                    </ul>
+                    <button class="text-brand-navy font-bold hover:text-brand-gold transition-colors flex items-center gap-2">
+                        Conozca al Equipo Directivo <span class="text-xl">→</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-navy text-white pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-1">
+                    <h3 class="text-2xl font-serif font-bold mb-6">ANGELCUBA<span class="text-brand-gold">WOXIC</span></h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Excelencia estratégica para líderes visionarios. Transformando el panorama empresarial global desde 2024.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 bg-white/5 hover:bg-white/10 flex items-center justify-center rounded-sm transition-colors">In</a>
+                        <a href="#" class="w-10 h-10 bg-white/5 hover:bg-white/10 flex items-center justify-center rounded-sm transition-colors">Tw</a>
+                        <a href="#" class="w-10 h-10 bg-white/5 hover:bg-white/10 flex items-center justify-center rounded-sm transition-colors">Fb</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-serif font-semibold mb-6 text-white">Servicios</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-gold transition-colors">Consultoría Estratégica</a></li>
+                        <li><a href="#" class="hover:text-brand-gold transition-colors">Fusiones y Adquisiciones</a></li>
+                        <li><a href="#" class="hover:text-brand-gold transition-colors">Transformación Digital</a></li>
+                        <li><a href="#" class="hover:text-brand-gold transition-colors">Gestión de Riesgos</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-serif font-semibold mb-6 text-white">Compañía</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-gold transition-colors">Sobre Nosotros</a></li>
+                        <li><a href="#" class="hover:text-brand-gold transition-colors">Nuestro Equipo</a></li>
+                        <li><a href="#" class="hover:text-brand-gold transition-colors">Carreras</a></li>
+                        <li><a href="#" class="hover:text-brand-gold transition-colors">Prensa</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-serif font-semibold mb-6 text-white">Contacto</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-brand-gold mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <span>Financial District, Suite 500<br>New York, NY 10005</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <span>contact@angelcuba-woxic.com</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            <span>+1 (555) 123-4567</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-gray-500">© 2026 AngelCuba Woxic. Todos los derechos reservados.</p>
+                <div class="flex gap-6 text-xs text-gray-500">
+                    <a href="#" class="hover:text-white transition-colors">Privacidad</a>
+                    <a href="#" class="hover:text-white transition-colors">Términos</a>
+                    <a href="#" class="hover:text-white transition-colors">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

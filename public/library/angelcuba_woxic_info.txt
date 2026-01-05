@@ -1,0 +1,20 @@
+[INFORMACIÓN DE SITIO: angelcuba-woxic]
+Fecha: 2026-01-04
+Estado: GENERADO POR IA (Versión 2 - Corporativo)
+
+DESCRIPCIÓN:
+Rediseño completo hacia una identidad corporativa de alto nivel, enfocada en consultoría estratégica y servicios profesionales.
+
+CONCEPTO: "Global Strategic Partners"
+- Estilo: Corporativo, Elegante, Limpio.
+- Colores: Navy Blue (#0f172a), Dorado Muted (#cca43b), Blanco y Grises.
+- Tipografía: Playfair Display (Serif para títulos) + Inter (Sans para cuerpo).
+
+ESTRUCTURA GENERADA:
+1. Top Bar: Información de contacto y acceso rápido.
+2. Hero Section: Imagen de oficina corporativa con propuesta de valor clara.
+3. Stats Bar: Métricas clave (Experiencia, Proyectos, Valor).
+4. Servicios: Tarjetas limpias con iconografía minimalista.
+5. Sobre Nosotros: Diseño asimétrico con imagen y texto inspirador.
+
+URL LOCAL: http://localhost:3000/angelcuba_woxic.html
