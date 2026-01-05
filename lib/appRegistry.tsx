@@ -2,7 +2,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import {
     Video, ImageIcon, HardDrive, Shield, Globe,
-    GraduationCap, Search, Code, Book, Terminal as TerminalIcon, Loader2, Leaf
+    GraduationCap, Search, Code, Book, Terminal as TerminalIcon, Loader2, Leaf, MessageSquare, Settings as SettingsIcon, Folder
 } from 'lucide-react';
 
 const LoadingApp = () => (
@@ -24,6 +24,10 @@ const Research = dynamic(() => import('../components/apps/Research'), { loading:
 const CodeEditor = dynamic(() => import('../components/apps/CodeEditor'), { loading: LoadingApp });
 const DevLibrary = dynamic(() => import('../components/apps/DevLibrary'), { loading: LoadingApp });
 const Terminal = dynamic(() => import('../components/apps/Terminal'), { loading: LoadingApp });
+// Nuevas Apps
+const ChatBot = dynamic(() => import('../components/apps/ChatBot'), { loading: LoadingApp });
+const Settings = dynamic(() => import('../components/apps/Settings'), { loading: LoadingApp });
+const FileManager = dynamic(() => import('../components/apps/FileManager'), { loading: LoadingApp });
 
 export interface AppDefinition {
     id: string;
@@ -34,6 +38,27 @@ export interface AppDefinition {
 }
 
 export const APP_REGISTRY: Record<string, AppDefinition> = {
+    'chatbot': {
+        id: 'chatbot',
+        name: 'Chat Robot',
+        component: ChatBot,
+        icon: MessageSquare,
+        description: 'Asistente IA Avanzado'
+    },
+    'file_manager': {
+        id: 'file_manager',
+        name: 'Archivos',
+        component: FileManager,
+        icon: Folder,
+        description: 'Gestor de archivos del sistema'
+    },
+    'settings': {
+        id: 'settings',
+        name: 'Ajustes',
+        component: Settings,
+        icon: SettingsIcon,
+        description: 'Configuración del sistema NEXA'
+    },
     'nexa_creator': {
         id: 'nexa_creator',
         name: 'NEXA Creator',

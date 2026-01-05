@@ -492,6 +492,10 @@ export default function NEXACompleteSetup() {
       setConversationId(null);
   };
 
+  if (currentView === 'chat') {
+      return <NexaDesktop user={user} onLogout={handleLogout} />;
+  }
+
   const clearChat = async () => {
     if (!window.confirm('¿Borrar historial del chat?')) return;
     
