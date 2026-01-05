@@ -526,127 +526,71 @@ export default function NEXACompleteSetup() {
             <div className="w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/50">
               <span className="text-3xl font-bold">N</span>
             </div>
-            <h1 className="text-3xl font-bold mb-2">NEXA AI - Setup</h1>
-            <p className="text-gray-400">Configuración inicial del sistema</p>
+            <h1 className="text-3xl font-bold mb-2">NEXA AI</h1>
+            <p className="text-gray-400">Sistema Operativo Inteligente</p>
           </div>
 
-          <div className="bg-gray-800 rounded-2xl p-6 space-y-6 shadow-2xl border border-gray-700">
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold flex items-center gap-2">
-                <Settings className="w-5 h-5 text-blue-400" />
-                Pasos de Configuración:
-              </h2>
-              
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 p-3 bg-blue-900/20 rounded-lg border border-blue-900/30">
-                  <span className="text-blue-400 font-bold mt-0.5">1.</span>
-                  <div>
-                    <p className="font-medium text-blue-100">Crea proyecto en Supabase</p>
-                    <p className="text-sm text-gray-400">Ve a <a href="https://supabase.com" target="_blank" className="text-blue-400 hover:underline">supabase.com</a> y crea una cuenta gratuita.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 bg-blue-900/20 rounded-lg border border-blue-900/30">
-                  <span className="text-blue-400 font-bold mt-0.5">2.</span>
-                  <div className="w-full">
-                    <p className="font-medium text-blue-100">Ejecuta este SQL en Supabase:</p>
-                    <div className="relative group mt-2">
-                        <pre className="text-xs bg-gray-950 p-3 rounded-lg overflow-x-auto text-gray-300 font-mono border border-gray-800">
-{`-- Crear tabla de usuarios
-CREATE TABLE users (
-  id UUID REFERENCES auth.users NOT NULL PRIMARY KEY,
-  email TEXT UNIQUE,
-  name TEXT,
-  preferences JSONB DEFAULT '{}',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  last_active TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Función y Trigger para nuevos usuarios
-CREATE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO public.users (id, email, name)
-  VALUES (new.id, new.email, new.raw_user_meta_data->>'name');
-  RETURN new;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
-
--- Crear tabla de conversaciones
-CREATE TABLE conversations (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES users(id),
-  title TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Crear tabla de mensajes
-CREATE TABLE messages (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  conversation_id UUID REFERENCES conversations(id),
-  role TEXT,
-  content TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  user_id UUID
-);`}
-                        </pre>
+          <div className="bg-gray-800 rounded-2xl p-6 space-y-6 shadow-2xl border border-gray-700 text-center">
+            <p className="text-lg text-gray-300">
+              Bienvenido a tu asistente personal. NEXA está listo para funcionar.
+            </p>
+            
+            <div className="flex flex-col gap-4 max-w-sm mx-auto">
+                <button
+                   onClick={() => setCurrentView('auth')}
+                   className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl text-white font-medium transition-colors shadow-lg flex items-center justify-center gap-2"
+               >
+                   <CheckCircle className="w-5 h-5" />
+                   Comenzar Ahora
+               </button>
+            </div>
+            
+            <div className="mt-8 pt-6 border-t border-gray-700">
+                <p className="text-xs text-gray-500 mb-4">Opciones Avanzadas (Nube)</p>
+                <div className="text-left bg-gray-900/50 p-4 rounded-lg border border-gray-700">
+                    <div className="flex items-center justify-between mb-2 cursor-pointer" onClick={() => {
+                        const el = document.getElementById('cloud-config');
+                        if (el) el.classList.toggle('hidden');
+                    }}>
+                        <span className="text-sm font-medium text-gray-300 flex items-center gap-2">
+                            <Database className="w-4 h-4 text-blue-400" />
+                            Configurar Supabase (Opcional)
+                        </span>
+                        <Settings className="w-4 h-4 text-gray-500" />
                     </div>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-3 p-3 bg-yellow-900/20 rounded-lg border border-yellow-900/30">
-                  <span className="text-yellow-400 font-bold mt-0.5">3.</span>
-                  <div className="w-full">
-                    <p className="font-medium text-yellow-100">⚠️ ACTUALIZA LAS CREDENCIALES</p>
-                    <p className="text-sm text-gray-400 mb-2">Ingresa tus credenciales reales aquí:</p>
-                    <div className="mt-2 space-y-3">
+                    
+                    <div id="cloud-config" className="hidden space-y-3 mt-3">
+                       <p className="text-xs text-gray-400">
+                         Si tienes un proyecto de Supabase, puedes conectarlo aquí para sincronizar tus datos en la nube.
+                       </p>
                        <div>
                          <label className="block text-xs font-medium text-gray-400 mb-1">URL del Proyecto</label>
                          <input
                            type="text"
                            value={config.url}
                            onChange={e => setConfig({ ...config, url: e.target.value })}
-                           className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:border-yellow-500 focus:outline-none transition-colors"
+                           className="w-full bg-gray-950 border border-gray-700 rounded-lg px-3 py-2 text-xs focus:border-blue-500 focus:outline-none text-gray-200"
                            placeholder="https://..."
                          />
                        </div>
                        <div>
-                         <label className="block text-xs font-medium text-gray-400 mb-1">Clave Anónima (Anon Key)</label>
+                         <label className="block text-xs font-medium text-gray-400 mb-1">Clave Anónima</label>
                          <input
                            type="password"
                            value={config.anonKey}
                            onChange={e => setConfig({ ...config, anonKey: e.target.value })}
-                           className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:border-yellow-500 focus:outline-none transition-colors"
-                           placeholder="eyJh..."
+                           className="w-full bg-gray-950 border border-gray-700 rounded-lg px-3 py-2 text-xs focus:border-blue-500 focus:outline-none text-gray-200"
+                           placeholder="key..."
                          />
                        </div>
+                       <button
+                           onClick={handleSaveConfig}
+                           className="w-full py-2 bg-blue-900/50 hover:bg-blue-900 text-blue-200 rounded-lg text-xs border border-blue-800 transition-colors"
+                       >
+                           Guardar Conexión
+                       </button>
                     </div>
-                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-gray-700 flex flex-col gap-3">
-               <button
-                   onClick={handleSaveConfig}
-                   className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl text-white font-medium transition-colors shadow-lg"
-               >
-                   {isConfigured ? 'Continuar con Supabase' : 'Guardar Configuración'}
-               </button>
-               
-               {!isConfigured && (
-                 <button
-                   onClick={() => setCurrentView('auth')}
-                   className="text-center text-yellow-400 text-sm mt-2 hover:underline bg-transparent border-none cursor-pointer"
-                 >
-                   ⚠️ Continuar en Modo Demo (Datos locales)
-                 </button>
-               )}
             </div>
           </div>
         </div>
