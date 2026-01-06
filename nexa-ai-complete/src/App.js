@@ -7,6 +7,7 @@ import SettingsPanel from './components/SettingsPanel/SettingsPanel';
 import Toolbar from './components/Toolbar/Toolbar';
 import { useVoiceControl } from './hooks/useVoiceControl';
 import FuturisticPanel from './components/FuturisticPanel/FuturisticPanel';
+import NetworkMonitor from './components/NetworkMonitor/NetworkMonitor';
 import './styles.css';
 
 function App() {
@@ -91,46 +92,7 @@ function App() {
       case 'settings':
         return <SettingsPanel voiceEnabled={voiceEnabled} setVoiceEnabled={setVoiceEnabled} />;
       case 'network':
-        return (
-            <div className="p-4" style={{ padding: '2rem' }}>
-                <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-light)', marginBottom: '2rem' }}>Red Global Distribuida</h2>
-                <div className="network-stats">
-                    <div className="stat-card">
-                        <div className="stat-info">
-                            <div className="stat-value">42</div>
-                            <div className="stat-label">Nodos Activos</div>
-                        </div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-info">
-                            <div className="stat-value">12ms</div>
-                            <div className="stat-label">Latencia Global</div>
-                        </div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-info">
-                            <div className="stat-value">99.9%</div>
-                            <div className="stat-label">Uptime</div>
-                        </div>
-                    </div>
-                </div>
-                <div style={{ marginTop: '2rem' }}>
-                    <h3 style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>Mapa de Calor de Tráfico (Simulado)</h3>
-                    <div style={{ 
-                        height: '300px', 
-                        background: 'rgba(0,0,0,0.2)', 
-                        borderRadius: '12px', 
-                        border: '1px solid var(--border)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'var(--text-muted)'
-                    }}>
-                        Visualización Geoespacial 3D Cargando...
-                    </div>
-                </div>
-            </div>
-        );
+        return <NetworkMonitor />;
       case 'infra':
          return (
              <div className="p-4" style={{ padding: '2rem' }}>
@@ -174,16 +136,18 @@ function App() {
       <main className="main-content">
         {renderContent()}
       </main>
-      <Toolbar 
-        input={input}
-        setInput={setInput}
-        handleSendMessage={handleSendMessage}
-        isListening={isListening}
-        toggleVoiceRecognition={toggleVoiceRecognition}
-        voiceEnabled={voiceEnabled}
-        setVoiceEnabled={setVoiceEnabled}
-        voiceError={voiceError}
-      />
+      {activeView !== 'chat' && (
+        <Toolbar 
+          input={input}
+          setInput={setInput}
+          handleSendMessage={handleSendMessage}
+          isListening={isListening}
+          toggleVoiceRecognition={toggleVoiceRecognition}
+          voiceEnabled={voiceEnabled}
+          setVoiceEnabled={setVoiceEnabled}
+          voiceError={voiceError}
+        />
+      )}
     </div>
   );
 }

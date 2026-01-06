@@ -19,16 +19,19 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [statusMessage, setStatusMessage] = useState('');
 
-    const MINIMAX_FALLBACK_KEY = 'sk-api-nIAxAwhsdtpWDEDyLCQmsO0E0HhdncgvjGie0TOZSOT9427oLlS2CH3wHyA90C62cXU7ZkHHWyF4DCBOqJqZS6Yq-R10L_khQ1AV7IpfNd2bw86eGkzAzg0';
     const [minimaxKey, setMinimaxKey] = useState('');
     const [useMiniMax, setUseMiniMax] = useState(true);
 
     useEffect(() => {
+        // First check local storage
         const storedKey = localStorage.getItem('nexa_minimax_key');
+        // Then check env var
+        const envKey = process.env.NEXT_PUBLIC_MINIMAX_KEY;
+
         if (storedKey) {
             setMinimaxKey(storedKey);
-        } else {
-            setMinimaxKey(MINIMAX_FALLBACK_KEY);
+        } else if (envKey) {
+            setMinimaxKey(envKey);
         }
     }, []);
 
@@ -66,9 +69,9 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
 
     const handleInsert = () => {
         if (previewUrl && onInsert) {
-             const text = mode === 'text' ? `Video generado: "${videoPrompt}"` : "Video generado desde imagen";
-             onInsert(text, previewUrl);
-             alert('Video insertado en tu proyecto NEXA');
+            const text = mode === 'text' ? `Video generado: "${videoPrompt}"` : "Video generado desde imagen";
+            onInsert(text, previewUrl);
+            alert('Video insertado en tu proyecto NEXA');
         }
     };
 
@@ -133,8 +136,8 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
                 });
 
                 if (!response.ok) {
-                     const errData = await response.json().catch(() => ({}));
-                     throw new Error(errData.error || 'Error en la generación');
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.error || 'Error en la generación');
                 }
 
                 const data = await response.json();
@@ -163,7 +166,7 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
     return (
         <div className={`${isEmbedded ? 'w-full h-full' : 'fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-in fade-in duration-300'}`}>
             <div className={`${isEmbedded ? 'w-full h-full bg-transparent' : 'bg-[#121212] border border-white/10 rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] text-slate-200'}`}>
-                
+
                 {/* Header (Solo si no está embebido) */}
                 {!isEmbedded && (
                     <div className="p-4 border-b border-white/5 flex items-center justify-between bg-[#151515]">
@@ -179,23 +182,23 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
 
                 {/* Tabs de Modo */}
                 <div className="p-4 flex items-center justify-center gap-4 bg-black/20 border-b border-white/5">
-                     <button
-                         onClick={() => { setMode('text'); setGeneratedVideo(false); }}
-                         className={`px-4 py-2 text-sm font-medium rounded-xl transition-all flex items-center gap-2 ${mode === 'text' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-                     >
-                         <Sparkles className="w-4 h-4" /> Texto a Video
-                     </button>
-                     <button
-                         onClick={() => { setMode('image'); setGeneratedVideo(false); }}
-                         className={`px-4 py-2 text-sm font-medium rounded-xl transition-all flex items-center gap-2 ${mode === 'image' ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-                     >
-                         <Video className="w-4 h-4" /> Imagen a Video
-                     </button>
+                    <button
+                        onClick={() => { setMode('text'); setGeneratedVideo(false); }}
+                        className={`px-4 py-2 text-sm font-medium rounded-xl transition-all flex items-center gap-2 ${mode === 'text' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                    >
+                        <Sparkles className="w-4 h-4" /> Texto a Video
+                    </button>
+                    <button
+                        onClick={() => { setMode('image'); setGeneratedVideo(false); }}
+                        className={`px-4 py-2 text-sm font-medium rounded-xl transition-all flex items-center gap-2 ${mode === 'image' ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                    >
+                        <Video className="w-4 h-4" /> Imagen a Video
+                    </button>
                 </div>
 
                 {/* Contenido Principal */}
                 <div className={`p-6 overflow-y-auto flex-1 space-y-6 ${isEmbedded ? 'bg-transparent' : 'bg-[#0C0C0C]'}`}>
-                    
+
                     {/* Mensaje de Estado / Loading */}
                     {isGenerating && (
                         <div className="flex flex-col items-center justify-center py-10 space-y-4">
@@ -239,13 +242,13 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
                                                 <button onClick={() => setUseMiniMax(!useMiniMax)} className="hover:text-white underline">Cambiar</button>
                                             </div>
                                         </div>
-                                        
+
                                         {useMiniMax && !minimaxKey && (
                                             <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-sm text-amber-200">
                                                 <p className="flex items-center gap-2 font-bold mb-2"><Zap className="w-4 h-4" /> API Key Requerida</p>
-                                                <input 
-                                                    type="password" 
-                                                    placeholder="Pega tu MiniMax API Key..." 
+                                                <input
+                                                    type="password"
+                                                    placeholder="Pega tu MiniMax API Key..."
                                                     className="w-full bg-black/30 border border-amber-500/30 rounded p-2 text-white focus:border-amber-500 outline-none"
                                                     onChange={(e) => saveMinimaxKey(e.target.value)}
                                                 />
@@ -289,11 +292,10 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
                                 <button
                                     onClick={handleGenerate}
                                     disabled={isGenerating || (mode === 'text' && !videoPrompt) || (mode === 'image' && !videoGenFile)}
-                                    className={`w-full py-4 rounded-xl font-bold text-white shadow-lg transition-all flex items-center justify-center gap-3 ${
-                                        isGenerating || (mode === 'text' && !videoPrompt) || (mode === 'image' && !videoGenFile)
-                                        ? 'bg-white/5 cursor-not-allowed text-slate-500'
-                                        : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 hover:scale-[1.02] active:scale-[0.98] shadow-blue-900/20'
-                                    }`}
+                                    className={`w-full py-4 rounded-xl font-bold text-white shadow-lg transition-all flex items-center justify-center gap-3 ${isGenerating || (mode === 'text' && !videoPrompt) || (mode === 'image' && !videoGenFile)
+                                            ? 'bg-white/5 cursor-not-allowed text-slate-500'
+                                            : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 hover:scale-[1.02] active:scale-[0.98] shadow-blue-900/20'
+                                        }`}
                                 >
                                     <Wand2 className="w-5 h-5" />
                                     {isGenerating ? 'Generando...' : 'Generar Video'}

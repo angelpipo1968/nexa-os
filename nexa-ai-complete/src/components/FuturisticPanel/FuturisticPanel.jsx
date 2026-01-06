@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Card, Row, Col, Typography, Button, Statistic, Progress, Avatar, List, Tag } from 'antd';
+import { Layout, Card, Row, Col, Typography, Button, Statistic, Progress, Avatar, Tag } from 'antd';
 import { 
   RocketOutlined, 
   MessageOutlined, 
@@ -30,10 +30,26 @@ const data = [
 
 const FuturisticPanel = ({ setActiveView }) => {
   const [loading, setLoading] = useState(true);
+  const [systemStats, setSystemStats] = useState({
+    cpu: 45,
+    memory: 72,
+    network: 90
+  });
 
   useEffect(() => {
     // Simulate loading futuristic interface
     setTimeout(() => setLoading(false), 1500);
+
+    // Simulate live system stats
+    const interval = setInterval(() => {
+      setSystemStats({
+        cpu: Math.floor(Math.random() * (60 - 30) + 30),
+        memory: Math.floor(Math.random() * (80 - 60) + 60),
+        network: Math.floor(Math.random() * (95 - 80) + 80)
+      });
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -110,28 +126,28 @@ const FuturisticPanel = ({ setActiveView }) => {
             {/* Quick Stats */}
             <Col xs={24} sm={12} lg={6}>
               <Card className="stat-card glass-card">
-                <Statistic title="Tokens Generados" value={12584} prefix={<CodeOutlined />} valueStyle={{ color: '#06b6d4' }} />
+                <Statistic title="Tokens Generados" value={12584} prefix={<CodeOutlined />} styles={{ content: { color: '#06b6d4' } }} />
               </Card>
             </Col>
             <Col xs={24} sm={12} lg={6}>
               <Card className="stat-card glass-card">
-                <Statistic title="Nodos Activos" value={42} prefix={<GlobalOutlined />} valueStyle={{ color: '#87d068' }} />
+                <Statistic title="Nodos Activos" value={42} prefix={<GlobalOutlined />} styles={{ content: { color: '#87d068' } }} />
               </Card>
             </Col>
             <Col xs={24} sm={12} lg={6}>
               <Card className="stat-card glass-card">
-                <Statistic title="Seguridad" value="98%" prefix={<SafetyCertificateOutlined />} valueStyle={{ color: '#fac858' }} />
+                <Statistic title="Seguridad" value="98%" prefix={<SafetyCertificateOutlined />} styles={{ content: { color: '#fac858' } }} />
               </Card>
             </Col>
             <Col xs={24} sm={12} lg={6}>
               <Card className="stat-card glass-card">
-                <Statistic title="Latencia" value="24ms" prefix={<ThunderboltOutlined />} valueStyle={{ color: '#7c3aed' }} />
+                <Statistic title="Latencia" value="24ms" prefix={<ThunderboltOutlined />} styles={{ content: { color: '#7c3aed' } }} />
               </Card>
             </Col>
 
             {/* Main Chart Area */}
             <Col xs={24} lg={16}>
-              <Card title="Actividad de la Red Neuronal" className="chart-card glass-card" bordered={false}>
+              <Card title="Actividad de la Red Neuronal" className="chart-card glass-card" variant="borderless">
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={data}>
                     <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" />
@@ -148,25 +164,23 @@ const FuturisticPanel = ({ setActiveView }) => {
 
             {/* Recent Activity */}
             <Col xs={24} lg={8}>
-              <Card title="Registro de Eventos" className="activity-card glass-card" bordered={false}>
-                <List
-                  itemLayout="horizontal"
-                  dataSource={[
+              <Card title="Registro de Eventos" className="activity-card glass-card" variant="borderless">
+                <div className="activity-list">
+                  {[
                     { title: 'Modelo Llama 3.3 Activado', time: 'Hace 2 min', color: 'green' },
                     { title: 'Sincronización Git Exitosa', time: 'Hace 15 min', color: 'blue' },
                     { title: 'Nuevo Nodo Detectado', time: 'Hace 1 hora', color: 'purple' },
                     { title: 'Actualización de Seguridad', time: 'Hace 3 horas', color: 'orange' },
-                  ]}
-                  renderItem={item => (
-                    <List.Item>
-                      <List.Item.Meta
-                        avatar={<div className={`activity-dot dot-${item.color}`}></div>}
-                        title={<span className="activity-title">{item.title}</span>}
-                        description={<span className="activity-time">{item.time}</span>}
-                      />
-                    </List.Item>
-                  )}
-                />
+                  ].map((item, index) => (
+                    <div key={index} className="activity-item">
+                      <div className={`activity-dot dot-${item.color}`}></div>
+                      <div className="activity-content">
+                        <span className="activity-title">{item.title}</span>
+                        <span className="activity-time">{item.time}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </Card>
             </Col>
           </Row>

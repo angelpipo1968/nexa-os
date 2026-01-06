@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Input, Button, List, Avatar, Typography, Select, Space, Card, Tag } from 'antd';
+import { Layout, Input, Button, Avatar, Typography, Select, Space, Card, Tag } from 'antd';
 import { SendOutlined, RobotOutlined, UserOutlined, RocketOutlined, GlobalOutlined } from '@ant-design/icons';
 import { Bot, Globe } from 'lucide-react';
 
@@ -202,7 +202,7 @@ const ChatInterface = () => {
             defaultValue="groq" 
             style={{ width: 220 }} 
             onChange={setSelectedModel}
-            bordered={false}
+            variant="borderless"
             options={[
               { value: 'groq', label: '⚡ Llama 3.3 (Groq/Meta)' },
               { value: 'google', label: '✨ Gemini 2.0 Flash (Google)' },
@@ -217,7 +217,7 @@ const ChatInterface = () => {
             defaultValue="default" 
             style={{ width: 140 }} 
             onChange={setPromptKey}
-            bordered={false}
+            variant="borderless"
             options={[
               { value: 'default', label: 'Modo: Asistente' },
               { value: 'creativo', label: 'Modo: Creativo' },
@@ -243,12 +243,10 @@ const ChatInterface = () => {
       </Header>
 
       <Content style={{ padding: '24px', overflowY: 'auto' }}>
-        <List
-          itemLayout="horizontal"
-          dataSource={messages}
-          split={false}
-          renderItem={item => (
-            <List.Item style={{ 
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {messages.map((item, index) => (
+            <div key={index} style={{ 
+              display: 'flex',
               justifyContent: item.role === 'user' ? 'flex-end' : 'flex-start', 
               padding: '12px 0'
             }}>
@@ -293,9 +291,9 @@ const ChatInterface = () => {
                   </Text>
                 </div>
               </div>
-            </List.Item>
-          )}
-        />
+            </div>
+          ))}
+        </div>
       </Content>
 
       <Footer style={{ background: 'transparent', padding: '24px' }}>
@@ -314,7 +312,7 @@ const ChatInterface = () => {
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
             onPressEnter={handleSendMessage}
-            bordered={false}
+            variant="borderless"
             style={{ 
               background: 'transparent', 
               color: 'white', 

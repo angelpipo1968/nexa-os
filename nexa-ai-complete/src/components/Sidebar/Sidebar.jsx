@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Shield
 } from 'lucide-react';
+import './Sidebar.css';
 
 const Sidebar = ({ isCollapsed, toggleCollapse, activeView, setActiveView }) => {
   return (

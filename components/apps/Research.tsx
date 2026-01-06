@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Search, Globe, FileText, Database, ArrowRight, Loader2, BookOpen, Share2, Download, Copy } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Globe, FileText, Database, ArrowRight, Loader2, BookOpen, Share2, Download, Copy, Clock, Trash2 } from 'lucide-react';
 
 interface ResearchProps {
   isOpen: boolean;
@@ -13,11 +13,35 @@ export default function Research({ isOpen, onClose, onInsert }: ResearchProps) {
   const [sources, setSources] = useState<'all' | 'academic' | 'news' | 'library' | 'dev'>('all');
   const [engine, setEngine] = useState<'google' | 'bing' | 'ddg' | 'scholar'>('google');
   const [saveToMemory, setSaveToMemory] = useState(true);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('nexa_recent_searches');
+    if (saved) {
+      try {
+        setRecentSearches(JSON.parse(saved).slice(0, 5));
+      } catch (e) { console.error('Error parsing recent searches', e); }
+    }
+  }, []);
+
+  const saveSearch = (term: string) => {
+    const newRecent = [term, ...recentSearches.filter(s => s !== term)].slice(0, 5);
+    setRecentSearches(newRecent);
+    localStorage.setItem('nexa_recent_searches', JSON.stringify(newRecent));
+  };
+
+  const clearHistory = () => {
+    setRecentSearches([]);
+    localStorage.removeItem('nexa_recent_searches');
+  };
 
   if (!isOpen) return null;
 
-  const handleSearch = () => {
-    if (!query.trim()) return;
+  const handleSearch = (termOverride?: string) => {
+    const searchTerm = termOverride || query;
+    if (!searchTerm.trim()) return;
+
+    saveSearch(searchTerm);
 
     let prompt = '';
     let sourceText = '';
@@ -32,10 +56,10 @@ export default function Research({ isOpen, onClose, onInsert }: ResearchProps) {
 
     switch (depth) {
       case 'quick':
-        prompt = `Realiza una búsqueda rápida en ${engine} sobre "${query}". Dame una respuesta directa y precisa.`;
+        prompt = `Realiza una búsqueda rápida en ${engine} sobre "${searchTerm}". Dame una respuesta directa y precisa.`;
         break;
       case 'deep':
-        prompt = `Actúa como un motor de búsqueda avanzado conectado a ${sourceText}. Realiza una investigación profunda sobre "${query}".
+        prompt = `Actúa como un motor de búsqueda avanzado conectado a ${sourceText}. Realiza una investigación profunda sobre "${searchTerm}".
         
 Estructura de respuesta requerida:
 1. **Resumen Ejecutivo**: Respuesta directa a la consulta.
@@ -46,12 +70,12 @@ Estructura de respuesta requerida:
 Asegúrate de que la información sea fácil de copiar y compartir.`;
         break;
       case 'academic':
-        prompt = `Realiza una búsqueda académica (tipo Google Scholar) sobre "${query}". Genera un informe con citas, metodología y referencias. Enfócate en ${sourceText}. Incluye enlaces a papers o artículos en formato [LINK: url | Título].`;
+        prompt = `Realiza una búsqueda académica (tipo Google Scholar) sobre "${searchTerm}". Genera un informe con citas, metodología y referencias. Enfócate en ${sourceText}. Incluye enlaces a papers o artículos en formato [LINK: url | Título].`;
         break;
     }
 
     if (saveToMemory) {
-      prompt += `\n\n[MEMORY: Investigando "${query}" en fuentes ${sources}]`;
+      prompt += `\n\n[MEMORY: Investigando "${searchTerm}" en fuentes ${sources}]`;
     }
 
     onInsert(prompt, 'system');
@@ -92,6 +116,31 @@ Asegúrate de que la información sea fácil de copiar y compartir.`;
               />
             </div>
           </div>
+
+          {/* Recent Searches */}
+          {!query && recentSearches.length > 0 && (
+            <div className="mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-bold text-slate-500 uppercase flex items-center gap-1">
+                  <Clock className="w-3 h-3" /> Recientes
+                </label>
+                <button onClick={clearHistory} className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1">
+                  <Trash2 className="w-3 h-3" /> Borrar
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {recentSearches.map((term, i) => (
+                  <button
+                    key={i}
+                    onClick={() => { setQuery(term); handleSearch(term); }}
+                    className="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-blue-500/30 rounded-full text-xs text-slate-300 transition-all"
+                  >
+                    {term}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="space-y-5">
             {/* Engines */}
@@ -171,7 +220,7 @@ Asegúrate de que la información sea fácil de copiar y compartir.`;
             Abortar
           </button>
           <button
-            onClick={handleSearch}
+            onClick={() => handleSearch()}
             disabled={!query.trim()}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg shadow-[0_0_15px_rgba(37,99,235,0.3)] transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
           >

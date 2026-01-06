@@ -3,6 +3,12 @@ import React, { useEffect, useRef } from 'react';
 const MatrixRain = ({ color = '#0F0' }: { color?: string }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
+    const colorRef = useRef(color);
+
+    useEffect(() => {
+        colorRef.current = color;
+    }, [color]);
+
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -26,7 +32,7 @@ const MatrixRain = ({ color = '#0F0' }: { color?: string }) => {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.fillStyle = color;
+            ctx.fillStyle = colorRef.current;
             ctx.font = `${fontSize}px monospace`;
 
             for (let i = 0; i < drops.length; i++) {

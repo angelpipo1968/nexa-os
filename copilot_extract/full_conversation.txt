@@ -1,0 +1,672 @@
+You said
+"Flutter template drawer
+Copilot said
+
+Here’s a clean, copy‑pasteable Flutter template with a Drawer you can customize.
+
+Dart
+Copy
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Drawer Template',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  void _onSelectItem(BuildContext context, String title) {
+    Navigator.pop(context); // close the drawer
+    // handle navigation or actions here
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Selected: $title')),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Drawer Example'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const UserAccountsDrawerHeader(
+              accountName: Text('Angel'),
+              accountEmail: Text('angel@example.com'),
+              currentAccountPicture: CircleAvatar(
+                child: Text('A'),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Home'),
+              onTap: () => _onSelectItem(context, 'Home'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () => _onSelectItem(context, 'Settings'),
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () => _onSelectItem(context, 'Logout'),
+            ),
+          ],
+        ),
+      ),
+      body: const Center(
+        child: Text('Main content goes here'),
+      ),
+    );
+  }
+}
+
+
+If you tell me your navigation style (e.g., Navigator.push, named routes, GoRouter), I can wire this drawer into a full template for your app structure.
+
+You said
+Quiero para una AI "Flutter template drawer necesito  que sea como la de Qwenn de alibaba me gusta ese estilo
+Copilot said
+
+Perfecto, angel. Ya entendí lo que buscas: un Drawer en Flutter con estética tipo Qwen de Alibaba — limpio, moderno, minimalista, con bordes redondeados, iconografía elegante y un header con estilo “AI assistant”.
+
+Aquí tienes un template completo, inspirado en ese estilo visual: moderno, suave, con tarjetas, sombras sutiles y un header tipo “AI persona”.
+
+🌙 Flutter Drawer estilo Qwen (Alibaba‑like)
+
+Diseño minimalista, elegante, con avatar circular, bordes suaves y secciones bien separadas.
+
+Dart
+Copy
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'AI Drawer Template',
+      theme: ThemeData(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: const Color(0xFFF7F7F7),
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+        ),
+      ),
+      home: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("AI Drawer Style"),
+      ),
+      drawer: const AiDrawer(),
+      body: const Center(
+        child: Text("Contenido principal"),
+      ),
+    );
+  }
+}
+
+class AiDrawer extends StatelessWidget {
+  const AiDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      width: 290,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.horizontal(right: Radius.circular(24)),
+      ),
+      child: Column(
+        children: [
+          // HEADER estilo Qwen
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF6A5AE0), Color(0xFF8F7BFF)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(24),
+              ),
+            ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 32,
+                  backgroundColor: Colors.white,
+                  child: Text(
+                    "AI",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple.shade600,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "NEXA Assistant",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        "Tu IA personal",
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // ITEMS estilo tarjeta
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              children: [
+                _drawerCard(
+                  icon: Icons.home_rounded,
+                  title: "Inicio",
+                  onTap: () => Navigator.pop(context),
+                ),
+                _drawerCard(
+                  icon: Icons.chat_bubble_rounded,
+                  title: "Conversaciones",
+                  onTap: () {},
+                ),
+                _drawerCard(
+                  icon: Icons.settings_rounded,
+                  title: "Configuración",
+                  onTap: () {},
+                ),
+                _drawerCard(
+                  icon: Icons.info_outline_rounded,
+                  title: "Acerca de",
+                  onTap: () {},
+                ),
+              ],
+            ),
+          ),
+
+          // FOOTER
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              "NEXA AI • 2026",
+              style: TextStyle(
+                color: Colors.grey.shade600,
+                fontSize: 13,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _drawerCard({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      elevation: 0,
+      color: Colors.white,
+      shadowColor: Colors.black12,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: ListTile(
+        leading: Icon(icon, color: Colors.deepPurple.shade400),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        onTap: onTap,
+      ),
+    );
+  }
+}
+
+🎨 Características del estilo Qwen que ya incluye este template
+
+Drawer con bordes redondeados y ancho reducido (290 px).
+
+Header con gradiente morado tipo Alibaba/Qwen.
+
+Avatar circular minimalista estilo “AI persona”.
+
+Tarjetas suaves para cada opción del menú.
+
+Tipografía limpia y moderna.
+
+Espaciado amplio y diseño aireado.
+
+🚀 ¿Quieres que lo lleve más lejos?
+
+Puedo crear:
+
+✔ Un Drawer animado
+✔ Un Drawer con modo oscuro automático
+✔ Un Drawer con menú inteligente tipo “AI agent”
+✔ Un Drawer con avatar dinámico (animaciones, glow, pulso)
+✔ Un Drawer con secciones plegables (accordion)
+✔ Un Drawer con navegación completa (GoRouter, Riverpod, Bloc)
+
+Solo dime qué vibe quieres para tu AI y lo ajusto a tu universo NEXA.
+
+You said
+Modo automático
+Copilot said
+
+Perfecto, angel. Si por modo automático te refieres a que el Drawer cambie automáticamente entre modo claro y oscuro según el sistema —igual que las interfaces modernas tipo Qwen— entonces aquí tienes una versión refinada del template que:
+
+🔥 Detecta el modo del sistema automáticamente
+🌙 Adapta colores, sombras y tarjetas según Light/Dark
+🎨 Mantiene el estilo elegante tipo Qwen/Alibaba
+
+Va directo al grano, sin complicaciones.
+
+🌗 Drawer estilo Qwen con modo automático (Light/Dark)
+Dart
+Copy
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'AI Drawer Template',
+      themeMode: ThemeMode.system, // 🔥 MODO AUTOMÁTICO
+      theme: _lightTheme,
+      darkTheme: _darkTheme,
+      home: const HomePage(),
+    );
+  }
+}
+
+// 🌞 Tema Claro
+final ThemeData _lightTheme = ThemeData(
+  brightness: Brightness.light,
+  scaffoldBackgroundColor: const Color(0xFFF7F7F7),
+  useMaterial3: true,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: Colors.deepPurple,
+    brightness: Brightness.light,
+  ),
+);
+
+// 🌙 Tema Oscuro
+final ThemeData _darkTheme = ThemeData(
+  brightness: Brightness.dark,
+  scaffoldBackgroundColor: const Color(0xFF0F0F12),
+  useMaterial3: true,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: Colors.deepPurple,
+    brightness: Brightness.dark,
+  ),
+);
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("AI Drawer Style"),
+      ),
+      drawer: const AiDrawer(),
+      body: const Center(
+        child: Text("Contenido principal"),
+      ),
+    );
+  }
+}
+
+class AiDrawer extends StatelessWidget {
+  const AiDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Drawer(
+      width: 290,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.horizontal(right: Radius.circular(24)),
+      ),
+      child: Column(
+        children: [
+          // HEADER estilo Qwen
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: isDark
+                    ? [const Color(0xFF4A3CC7), const Color(0xFF6A5AE0)]
+                    : [const Color(0xFF6A5AE0), const Color(0xFF8F7BFF)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(24),
+              ),
+            ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 32,
+                  backgroundColor: Colors.white,
+                  child: Text(
+                    "AI",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple.shade600,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "NEXA Assistant",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        "Tu IA personal",
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // ITEMS estilo tarjeta
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              children: [
+                _drawerCard(
+                  context,
+                  icon: Icons.home_rounded,
+                  title: "Inicio",
+                  onTap: () => Navigator.pop(context),
+                ),
+                _drawerCard(
+                  context,
+                  icon: Icons.chat_bubble_rounded,
+                  title: "Conversaciones",
+                  onTap: () {},
+                ),
+                _drawerCard(
+                  context,
+                  icon: Icons.settings_rounded,
+                  title: "Configuración",
+                  onTap: () {},
+                ),
+                _drawerCard(
+                  context,
+                  icon: Icons.info_outline_rounded,
+                  title: "Acerca de",
+                  onTap: () {},
+                ),
+              ],
+            ),
+          ),
+
+          // FOOTER
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              "NEXA AI • 2026",
+              style: TextStyle(
+                color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                fontSize: 13,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _drawerCard(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Card(
+      elevation: 0,
+      color: isDark ? const Color(0xFF1A1A1E) : Colors.white,
+      shadowColor: Colors.black12,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: ListTile(
+        leading: Icon(
+          icon,
+          color: isDark ? Colors.deepPurple.shade200 : Colors.deepPurple.shade400,
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: isDark ? Colors.white : Colors.black87,
+          ),
+        ),
+        onTap: onTap,
+      ),
+    );
+  }
+}
+
+🚀 ¿Qué hace este modo automático?
+
+Detecta si el sistema está en modo claro u oscuro.
+
+Cambia:
+
+Fondo del Drawer
+
+Colores de tarjetas
+
+Gradiente del header
+
+Iconos
+
+Tipografía
+
+Mantiene la estética elegante tipo Qwen.
+
+¿Quieres que el Drawer tenga animaciones suaves tipo “sliding glow”, avatar con pulso, o un modo “AI persona” más avanzado?
+
+Puedo llevarlo al siguiente nivel.
+
+You said
+Si que tenga en la parte de abajo donde se escribe  micrófono y la flecha sen y un botón stop para cuando  tu chat  boot quiera que pare de hablar para
+Copilot said
+
+Entendido, angel. Quieres que tu app Flutter tenga una barra inferior estilo chat‑AI, como las de Qwen, ChatGPT o Copilot, con:
+
+✔ Campo de texto
+✔ Botón de micrófono
+✔ Botón de enviar (flecha)
+✔ Botón STOP para detener la voz del bot cuando esté hablando
+
+Y todo integrado de forma elegante, moderna y compatible con modo claro/oscuro.
+
+Aquí tienes un widget completo, listo para usar debajo de tu Scaffold, que puedes combinar con tu Drawer actual.
+
+🔥 Barra inferior estilo Qwen / ChatGPT con micrófono, enviar y STOP
+Dart
+Copy
+class AiInputBar extends StatelessWidget {
+  final TextEditingController controller;
+  final VoidCallback onSend;
+  final VoidCallback onMic;
+  final VoidCallback onStop;
+
+  const AiInputBar({
+    super.key,
+    required this.controller,
+    required this.onSend,
+    required this.onMic,
+    required this.onStop,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return SafeArea(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1A1A1E) : Colors.white,
+          border: Border(
+            top: BorderSide(
+              color: isDark ? Colors.white10 : Colors.black12,
+            ),
+          ),
+        ),
+        child: Row(
+          children: [
+            // MIC
+            IconButton(
+              onPressed: onMic,
+              icon: Icon(
+                Icons.mic_rounded,
+                color: isDark ? Colors.deepPurple.shade200 : Colors.deepPurple,
+                size: 28,
+              ),
+            ),
+
+            // TEXT FIELD
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF2A2A2E) : const Color(0xFFF2F2F7),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: TextField(
+                  controller: controller,
+                  minLines: 1,
+                  maxLines: 5,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Escribe tu mensaje...",
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(width: 8),
+
+            // SEND BUTTON
+            IconButton(
+              onPressed: onSend,
+              icon: Icon(
+                Icons.send_rounded,
+                color: isDark ? Colors.deepPurple.shade200 : Colors.deepPurple,
+                size: 26,
+              ),
+            ),
+
+            // STOP BUTTON
+            IconButton(
+              onPressed: onStop,
+              icon: Icon(
+                Icons.stop_circle_rounded,
+                color: Colors.redAccent,
+                size: 30,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

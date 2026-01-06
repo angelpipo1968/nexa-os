@@ -270,9 +270,26 @@
 }
 
 /* Activity List */
-.activity-card .ant-list-item {
+.activity-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
   border-bottom: 1px solid var(--glass-border);
   padding: 12px 0;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-content {
+  display: flex;
+  flex-direction: column;
 }
 
 .activity-dot {
