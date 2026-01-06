@@ -18,9 +18,8 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
     const [generatedVideo, setGeneratedVideo] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [statusMessage, setStatusMessage] = useState('');
-
+    const [useMiniMax, setUseMiniMax] = useState(false);
     const [minimaxKey, setMinimaxKey] = useState('');
-    const [useMiniMax, setUseMiniMax] = useState(true);
 
     useEffect(() => {
         // First check local storage
@@ -112,7 +111,7 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
         });
     };
 
-    // ✅ Función handleGenerate Principal
+    // ✅ Función handleGenerate Principal (Mejorada por Engineer Bot)
     const handleGenerate = async () => {
         if ((mode === 'text' && !videoPrompt) || (mode === 'image' && !videoGenFile)) return;
 
@@ -121,7 +120,7 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
 
         try {
             if (mode === 'text') {
-                // Caso 1: Texto (MiniMax Backend)
+                // Caso 1: Texto (MiniMax Backend o SVD)
                 const formData = new FormData();
                 formData.append('prompt', videoPrompt);
                 formData.append('model', useMiniMax ? 'hailuo-2.3' : 'svd');
@@ -129,7 +128,7 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
                     formData.append('apiKey', minimaxKey);
                 }
 
-                const apiUrl = process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/generate-video` : '/api/generate-video';
+                const apiUrl = '/api/generate-video';
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     body: formData,
@@ -143,8 +142,7 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
                 const data = await response.json();
                 setPreviewUrl(data.videoUrl);
             } else {
-                // Caso 2: Imagen (SVD Cliente - Fallback por ahora)
-                // Usamos lógica local porque el backend aún no procesa imágenes pesadas
+                // Caso 2: Imagen (SVD Cliente)
                 const hfToken = localStorage.getItem('nexa_hf_token') || '';
                 const videoBlob = await generateVideoFromImage(videoGenFile!, hfToken);
                 setPreviewUrl(URL.createObjectURL(videoBlob));
@@ -293,8 +291,8 @@ export default function VideoGen({ isOpen = true, onClose, onInsert, initialFile
                                     onClick={handleGenerate}
                                     disabled={isGenerating || (mode === 'text' && !videoPrompt) || (mode === 'image' && !videoGenFile)}
                                     className={`w-full py-4 rounded-xl font-bold text-white shadow-lg transition-all flex items-center justify-center gap-3 ${isGenerating || (mode === 'text' && !videoPrompt) || (mode === 'image' && !videoGenFile)
-                                            ? 'bg-white/5 cursor-not-allowed text-slate-500'
-                                            : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 hover:scale-[1.02] active:scale-[0.98] shadow-blue-900/20'
+                                        ? 'bg-white/5 cursor-not-allowed text-slate-500'
+                                        : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 hover:scale-[1.02] active:scale-[0.98] shadow-blue-900/20'
                                         }`}
                                 >
                                     <Wand2 className="w-5 h-5" />

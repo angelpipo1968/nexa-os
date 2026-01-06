@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:file_selector/file_selector.dart';
 import 'ai_drawer.dart';
 import 'ai_input_bar.dart';
 import 'logo_forge.dart';
 import 'media_studio.dart';
+import 'app_registry.dart';
 
 class StudioPage extends StatefulWidget {
   const StudioPage({super.key});
@@ -26,12 +29,18 @@ class _StudioPageState extends State<StudioPage> {
   double _previewWidth = 375; // Ancho inicial (Móvil)
   double _previewHeight = 700; // Alto inicial
   bool _showResizeControls = false; // Mostrar sliders
-  bool _isLogoForgeActive = false; // Estado para Logo Forge
-  bool _isMediaStudioActive = false; // Estado para Media Studio
+  bool _showResizeControls = false; // Mostrar sliders
+  
+  // Nuevo Estado: App Activa (ID from registry)
+  String? _activeAppId;
 
-  // Configuración de Integraciones (Módulos activados)
-  bool _enableLogoForge = true;
-  bool _enableMediaStudio = true;
+  // Nuevo Estado: Apps Habilitadas (Todas activas por defecto)
+  final Set<String> _enabledApps = {
+    'chatbot', 'nexa_creator', 'logo_forge', 'media_studio', 
+    'living_machine', 'security', 'web_dev', 'research', 'terminal'
+  };
+
+  bool _isListening = false; // Estado del micrófono
 
   // Backend Configuration
   String _backendUrl = kIsWeb ? "http://localhost:8087" : "http://10.0.2.2:8087";
@@ -67,8 +76,8 @@ class _StudioPageState extends State<StudioPage> {
       setState(() {
          _messages.add(_ChatMessage(text: userText, isUser: true));
          _chatController.clear();
-         _showPreview = true;
-         _isLogoForgeActive = true;
+          _activeAppId = 'logo_forge';
+          _showPreview = false;
       });
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
@@ -208,6 +217,74 @@ class _StudioPageState extends State<StudioPage> {
     });
   }
 
+
+
+  // Simulación de Micrófono (Activación)
+  void _handleMicInput() {
+    if (_isListening) {
+      // Detener escucha
+      setState(() => _isListening = false);
+      return;
+    }
+
+    // Iniciar escucha (Simulada)
+    setState(() {
+       _isListening = true;
+       _hintText = "Escuchando... (Habla ahora)";
+    });
+
+    // Simular que detecta voz después de 3 segundos
+    Future.delayed(const Duration(seconds: 3), () {
+       if (!mounted || !_isListening) return;
+       setState(() {
+          _isListening = false;
+          _chatController.text = "Crear un logo para mi empresa de café"; // Ejemplo de voz a texto
+          _hintText = "How can I help you today?";
+       });
+       // Opcional: Auto-enviar
+       // _sendMessage(); 
+    });
+  }
+
+  // Descargar Mensaje a Archivo
+  Future<void> _downloadMessage(String content, BuildContext context) async {
+    try {
+      final String fileName = 'nexa_chat_${DateTime.now().millisecondsSinceEpoch}.txt';
+      
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+         // Desktop: Usar File Selector (Guardar Como)
+         final FileSaveLocation? result = await getSaveLocation(suggestedName: fileName);
+         if (result == null) return; // Usuario canceló
+
+         final Uint8List fileData = Uint8List.fromList(utf8.encode(content));
+         final XFile textFile = XFile.fromData(fileData, name: fileName, mimeType: 'text/plain');
+         
+         await textFile.saveTo(result.path);
+         
+         if (context.mounted) {
+           ScaffoldMessenger.of(context).showSnackBar(
+             SnackBar(content: Text('✅ Guardado en: ${result.path}')),
+           );
+         }
+      } else {
+         // Mobile Fallback (Simulación o PathProvider)
+         // Por simplicidad en esta demo móvil, copia al portapapeles y notifica
+         Clipboard.setData(ClipboardData(text: content));
+         if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('📱 Móvil: Texto copiado (Guardar archivo requiere permisos nativos extra)')),
+            );
+         }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('❌ Error al guardar: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Definimos los temas aquí para que se actualicen con el estado local
@@ -251,26 +328,27 @@ class _StudioPageState extends State<StudioPage> {
           ),
           actions: [
           actions: [
-            // Botón Logo Forge (Si está habilitado)
-            if (_enableLogoForge)
-              IconButton(
-                icon: const Icon(Icons.auto_fix_high, color: Colors.purpleAccent),
-                onPressed: () {
-                  setState(() {
-                    _isLogoForgeActive = !_isLogoForgeActive;
-                    if (_isLogoForgeActive) {
-                       _showPreview = true;
-                       _isMediaStudioActive = false; 
-                    }
-                  });
-                  if (_isLogoForgeActive) {
-                    setState(() {
-                      _messages.add(_ChatMessage(text: "🎨 Logo Forge activado", isUser: false));
-                    });
-                  }
-                },
-                tooltip: "Abrir Logo Forge",
-              ),
+          actions: [
+            // Botones de Apps Habilitadas (Dynamic from Registry)
+            ...AppRegistry.allApps.where((app) => _enabledApps.contains(app.id)).map((app) {
+               final isActive = _activeAppId == app.id;
+               return IconButton(
+                  icon: Icon(app.icon, color: isActive ? app.color : Colors.grey),
+                  tooltip: "Abrir ${app.name}",
+                  onPressed: () {
+                     setState(() {
+                        if (isActive) {
+                           _activeAppId = null; // Close if already active
+                           _showPreview = false;
+                        } else {
+                           _activeAppId = app.id;
+                           _showPreview = false;
+                           _messages.add(_ChatMessage(text: "🚀 Iniciando **${app.name}**...", isUser: false));
+                        }
+                     });
+                  },
+               );
+            }),
             // Botón de Vista Previa (Ojo)
             IconButton(
               icon: Icon(_showPreview ? Icons.visibility_off : Icons.visibility),
@@ -293,34 +371,22 @@ class _StudioPageState extends State<StudioPage> {
         ),
         endDrawer: _buildEditorDrawer(),
         drawer: AiDrawer(
-          enableLogoForge: _enableLogoForge,
-          enableMediaStudio: _enableMediaStudio,
-          onOpenLogoForge: () {
+          enabledApps: _enabledApps,
+          onOpenApp: (appId) {
              setState(() {
-                _isLogoForgeActive = true;
-                _isMediaStudioActive = false;
-                _showPreview = false; 
-             });
-             // Add a system message
-             setState(() {
-                _messages.add(_ChatMessage(text: "🎨 Iniciando **Logo Studio**...", isUser: false));
-             });
-          },
-          onOpenMediaStudio: () {
-             setState(() {
-                _isMediaStudioActive = true;
-                _isLogoForgeActive = false;
+                _activeAppId = appId;
                 _showPreview = false;
              });
+             final appName = AppRegistry.getApp(appId)?.name ?? "App";
              setState(() {
-                _messages.add(_ChatMessage(text: "🎬 Iniciando **Media Studio** (Video + Imagen)...", isUser: false));
+                _messages.add(_ChatMessage(text: "🚀 Ejecutando **$appName**...", isUser: false));
              });
           },
         ), // El drawer original
         body: LayoutBuilder(
           builder: (context, constraints) {
             bool isMobile = constraints.maxWidth < 900;
-            bool isPanelActive = _isLogoForgeActive || _isMediaStudioActive || _showPreview;
+            bool isPanelActive = _activeAppId != null || _showPreview;
 
             // VISTA MÓVIL: Si hay panel activo, mostramos SOLO el panel (con botón atrás)
             if (isMobile && isPanelActive) {
@@ -338,27 +404,24 @@ class _StudioPageState extends State<StudioPage> {
                            icon: const Icon(Icons.arrow_back),
                            onPressed: () {
                              setState(() {
-                               _isLogoForgeActive = false;
-                               _isMediaStudioActive = false;
+                               _activeAppId = null;
                                _showPreview = false;
                              });
                            },
                          ),
                          Text(
-                           _isLogoForgeActive ? "Logo Studio" 
-                           : _isMediaStudioActive ? "Media Studio" 
-                           : "Vista Previa",
+                           _activeAppId != null 
+                              ? (AppRegistry.getApp(_activeAppId!)?.name ?? "App")
+                              : "Vista Previa",
                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                          ),
                        ],
                      ),
                    ),
                    Expanded(
-                     child: _isLogoForgeActive 
-                        ? const LogoForge()
-                        : _isMediaStudioActive
-                            ? const MediaStudio()
-                            : _buildPreviewPanel(context),
+                     child: _activeAppId != null
+                        ? (AppRegistry.getApp(_activeAppId!)?.builder(context) ?? const Center(child: Text("App Error")))
+                        : _buildPreviewPanel(context),
                    ),
                  ],
                );
@@ -378,22 +441,18 @@ class _StudioPageState extends State<StudioPage> {
                     showSuggestions: _showSuggestions,
                     accentColor: _accentColor,
                     onSend: _sendMessage,
-                    onMic: () {},
-                    onStop: () {},
+                    onMic: _handleMicInput,
+                    onStop: () => setState(() => _isListening = false),
                     onVideoUpload: _handleVideoUpload,
+                    onDownload: (txt) => _downloadMessage(txt, context),
                   ),
                 ),
                 
                 // Panel Derecho (Solo visible en Desktop si está activo)
-                if (_isLogoForgeActive)
+                if (_activeAppId != null)
                    Expanded(
                      flex: 1,
-                     child: const LogoForge(),
-                   )
-                else if (_isMediaStudioActive)
-                   Expanded(
-                     flex: 1,
-                     child: const MediaStudio(),
+                     child: AppRegistry.getApp(_activeAppId!)?.builder(context) ?? const Center(child: Text("App Error")),
                    )
                 else if (_showPreview) ...[
                   const VerticalDivider(width: 1),
@@ -538,6 +597,7 @@ class _StudioPageState extends State<StudioPage> {
                             onSend: () {}, // No funcional en preview pasiva
                             onMic: () {},
                             onStop: () {},
+                            onDownload: (txt) {}, // No funcional en preview
                           ),
                         ),
                 ),
@@ -601,6 +661,7 @@ class _StudioPageState extends State<StudioPage> {
             onSend: () {},
             onMic: () {},
             onStop: () {},
+            onDownload: (txt) {}, // No funcional en preview
           ),
         ),
       ),
@@ -680,36 +741,28 @@ class _StudioPageState extends State<StudioPage> {
           const Text("Integraciones", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const Divider(),
           
-          SwitchListTile(
-             secondary: const Icon(Icons.auto_fix_high, color: Colors.purpleAccent),
-             title: const Text("Logo Studio"),
-             subtitle: const Text("Diseño de identidad"),
-             value: _enableLogoForge,
-             onChanged: (val) {
-                setState(() {
-                  _enableLogoForge = val;
-                  if (!val && _isLogoForgeActive) {
-                     _isLogoForgeActive = false; 
-                     _showPreview = false;
-                  }
-                });
-             },
-          ),
-          SwitchListTile(
-             secondary: const Icon(Icons.movie_filter, color: Colors.redAccent),
-             title: const Text("Media Studio"),
-             subtitle: const Text("Video e Imagen"),
-             value: _enableMediaStudio,
-             onChanged: (val) {
-                setState(() {
-                  _enableMediaStudio = val;
-                  if (!val && _isMediaStudioActive) {
-                     _isMediaStudioActive = false;
-                     _showPreview = false;
-                  }
-                });
-             },
-          ),
+          // Generate Switches Dynamically from Registry
+          ...AppRegistry.allApps.map((app) {
+             final isEnabled = _enabledApps.contains(app.id);
+             return SwitchListTile(
+               secondary: Icon(app.icon, color: app.color),
+               title: Text(app.name),
+               subtitle: Text(app.subtitle),
+               value: isEnabled,
+               onChanged: (val) {
+                  setState(() {
+                     if (val) {
+                        _enabledApps.add(app.id);
+                     } else {
+                        _enabledApps.remove(app.id);
+                        if (_activeAppId == app.id) {
+                           _activeAppId = null; // Close if disabled
+                        }
+                     }
+                  });
+               },
+             );
+          }),
 
           const SizedBox(height: 20),
           const Text("Color de Acento", style: TextStyle(fontWeight: FontWeight.bold)),
@@ -747,6 +800,7 @@ class _ChatInterface extends StatelessWidget {
   final VoidCallback onMic;
   final VoidCallback onStop;
   final VoidCallback? onVideoUpload;
+  final Function(String, BuildContext) onDownload; // Nuevo Callback
 
   const _ChatInterface({
     required this.controller,
@@ -759,6 +813,7 @@ class _ChatInterface extends StatelessWidget {
     required this.onMic,
     required this.onStop,
     this.onVideoUpload,
+    required this.onDownload,
   });
 
   @override
@@ -774,6 +829,7 @@ class _ChatInterface extends StatelessWidget {
               return _MessageBubble(
                 message: msg,
                 accentColor: accentColor,
+                onDownload: (txt) => onDownload(txt, context),
               );
             },
           ),
@@ -797,10 +853,12 @@ class _ChatInterface extends StatelessWidget {
 class _MessageBubble extends StatelessWidget {
   final _ChatMessage message;
   final Color accentColor;
+  final Function(String) onDownload;
 
   const _MessageBubble({
     required this.message,
     required this.accentColor,
+    required this.onDownload,
   });
 
   @override
@@ -869,13 +927,8 @@ class _MessageBubble extends StatelessWidget {
                     const SizedBox(width: 4),
                     _ActionButton(
                       icon: Icons.download_outlined, 
-                      tooltip: "Descargar", 
-                      onTap: () {
-                        Clipboard.setData(ClipboardData(text: message.text));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Copiado para guardar (Simulación de descarga)'), duration: Duration(milliseconds: 1500)),
-                        );
-                      }
+                      tooltip: "Guardar en Archivo", 
+                      onTap: () => onDownload(message.text),
                     ),
                     const SizedBox(width: 4),
                     _ActionButton(

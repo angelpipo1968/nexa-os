@@ -1,17 +1,13 @@
-import 'package:flutter/material.dart';
+import 'app_registry.dart';
 
 class AiDrawer extends StatefulWidget {
-  final VoidCallback? onOpenLogoForge;
-  final VoidCallback? onOpenMediaStudio;
-  final bool enableLogoForge;
-  final bool enableMediaStudio;
+  final Function(String) onOpenApp;
+  final Set<String> enabledApps;
 
   const AiDrawer({
     super.key, 
-    this.onOpenLogoForge, 
-    this.onOpenMediaStudio,
-    this.enableLogoForge = true,
-    this.enableMediaStudio = true,
+    required this.onOpenApp,
+    required this.enabledApps,
   });
 
   @override
@@ -146,91 +142,44 @@ class _AiDrawerState extends State<AiDrawer> {
               _HistoryItem(title: "Ideas de Viaje", date: "Lun", isDark: isDark),
               _HistoryItem(title: "Receta Pizza", date: "Dom", isDark: isDark),
 
-        if (widget.enableLogoForge || widget.enableMediaStudio) ...[
-          const Divider(height: 32),
-          
-          Padding(
-            padding: const EdgeInsets.only(left: 12, bottom: 8),
-            child: Text(
-              "APLICACIONES",
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white54 : Colors.black54,
-              ),
-            ),
-          ),
-        ],
+              // SECCIÓN APLICACIONES (Dinámica desde AppRegistry)
+              if (widget.enabledApps.isNotEmpty) ...[
+                 const Divider(height: 32),
+                 Padding(
+                    padding: const EdgeInsets.only(left: 12, bottom: 8),
+                    child: Text(
+                      "APLICACIONES",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? Colors.white54 : Colors.black54,
+                      ),
+                    ),
+                 ),
 
-        if (widget.enableLogoForge)
-          ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-            dense: true,
-            leading: Container(
-               padding: const EdgeInsets.all(6),
-               decoration: BoxDecoration(
-                 color: Colors.purple.withOpacity(0.2),
-                 borderRadius: BorderRadius.circular(8)
-               ),
-               child: const Icon(Icons.auto_fix_high, color: Colors.purpleAccent, size: 18),
-            ),
-            title: Text("Logo Studio", style: TextStyle(color: isDark ? Colors.white : Colors.black87, fontWeight: FontWeight.bold)),
-            subtitle: Text("Diseña tu marca", style: TextStyle(color: isDark ? Colors.white38 : Colors.black38, fontSize: 11)),
-            onTap: () {
-               Navigator.pop(context); // Cerrar drawer
-               if (widget.onOpenLogoForge != null) widget.onOpenLogoForge!();
-            },
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-          
-        if (widget.enableLogoForge && widget.enableMediaStudio)
-          const SizedBox(height: 8),
-
-        if (widget.enableMediaStudio)
-          ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-            dense: true,
-            leading: Container(
-               padding: const EdgeInsets.all(6),
-               decoration: BoxDecoration(
-                 color: Colors.red.withOpacity(0.2),
-                 borderRadius: BorderRadius.circular(8)
-               ),
-               child: const Icon(Icons.movie_filter, color: Colors.redAccent, size: 18),
-            ),
-            title: Text("Media Studio", style: TextStyle(color: isDark ? Colors.white : Colors.black87, fontWeight: FontWeight.bold)),
-            subtitle: Text("Video e Imágenes", style: TextStyle(color: isDark ? Colors.white38 : Colors.black38, fontSize: 11)),
-            onTap: () {
-               Navigator.pop(context); // Cerrar drawer
-               if (widget.onOpenMediaStudio != null) widget.onOpenMediaStudio!();
-            },
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              
-              const SizedBox(height: 8),
-
-              ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                dense: true,
-                leading: Container(
-                   padding: const EdgeInsets.all(6),
-                   decoration: BoxDecoration(
-                     color: Colors.red.withOpacity(0.2),
-                     borderRadius: BorderRadius.circular(8)
-                   ),
-                   child: const Icon(Icons.movie_filter, color: Colors.redAccent, size: 18),
-                ),
-                title: Text("Media Studio", style: TextStyle(color: isDark ? Colors.white : Colors.black87, fontWeight: FontWeight.bold)),
-                subtitle: Text("Video e Imágenes", style: TextStyle(color: isDark ? Colors.white38 : Colors.black38, fontSize: 11)),
-                onTap: () {
-                   Navigator.pop(context); // Cerrar drawer
-                   if (widget.onOpenMediaStudio != null) widget.onOpenMediaStudio!();
-                },
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
+                 // Renderizar cada app habilitada que exista en el registro
+                 ...AppRegistry.allApps.where((app) => widget.enabledApps.contains(app.id)).map((app) {
+                    return ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                      dense: true,
+                      leading: Container(
+                         padding: const EdgeInsets.all(6),
+                         decoration: BoxDecoration(
+                           color: app.color.withOpacity(0.2),
+                           borderRadius: BorderRadius.circular(8)
+                         ),
+                         child: Icon(app.icon, color: app.color, size: 18),
+                      ),
+                      title: Text(app.name, style: TextStyle(color: isDark ? Colors.white : Colors.black87, fontWeight: FontWeight.bold)),
+                      subtitle: Text(app.subtitle, style: TextStyle(color: isDark ? Colors.white38 : Colors.black38, fontSize: 11)),
+                      onTap: () {
+                         Navigator.pop(context); // Cerrar drawer
+                         widget.onOpenApp(app.id);
+                      },
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    );
+                 }),
+              ],
             ],
           ),
         ),
