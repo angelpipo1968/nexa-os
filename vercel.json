@@ -2,15 +2,15 @@
   "rewrites": [
     {
       "source": "/api/py/:path*",
-      "destination": "https://nexa-backend-fastapi.onrender.com/api/:path*"
+      "destination": "https://ai-backend.onrender.com/api/:path*"
     },
     {
       "source": "/api/py-docs",
-      "destination": "https://nexa-backend-fastapi.onrender.com/docs"
+      "destination": "https://ai-backend.onrender.com/docs"
     },
     {
       "source": "/openapi.json",
-      "destination": "https://nexa-backend-fastapi.onrender.com/openapi.json"
+      "destination": "https://ai-backend.onrender.com/openapi.json"
     }
   ]
 }
