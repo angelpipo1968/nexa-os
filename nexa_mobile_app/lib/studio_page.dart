@@ -33,11 +33,21 @@ class _StudioPageState extends State<StudioPage> {
   bool _enableLogoForge = true;
   bool _enableMediaStudio = true;
 
+  // Backend Configuration
+  String _backendUrl = kIsWeb ? "http://localhost:8087" : "http://10.0.2.2:8087";
+  final TextEditingController _backendUrlController = TextEditingController();
+
   Color _accentColor = const Color(0xFF2563EB); // Default Blue
 
   final TextEditingController _chatController = TextEditingController();
   final TextEditingController _hintTextController = TextEditingController();
   
+  @override
+  void initState() {
+    super.initState();
+    _backendUrlController.text = _backendUrl;
+  }
+
   // Lista de mensajes para el simulador
   final List<_ChatMessage> _messages = [];
 
@@ -102,8 +112,8 @@ class _StudioPageState extends State<StudioPage> {
   }
 
   Future<String> _fetchAIResponse(String input) async {
-    // Determinar URL base (localhost para web, 10.0.2.2 para Android Emulator)
-    String baseUrl = kIsWeb ? "http://localhost:8087" : "http://10.0.2.2:8087";
+    // Usar la URL configurada dinámicamente
+    String baseUrl = _backendUrl;
     
     // Construir historial de mensajes para contexto
     final history = _messages.map((m) => {
@@ -632,6 +642,23 @@ class _StudioPageState extends State<StudioPage> {
             onChanged: (value) {
               setState(() {
                 _hintText = value;
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+
+          // Configuración del Backend (URL)
+          const Text("Servidor Backend (URL)", style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text("Usa tu URL de Ngrok si estás fuera de casa.", style: TextStyle(fontSize: 10, color: Colors.grey)),
+          TextField(
+            controller: _backendUrlController,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: "http://localhost:8087",
+            ),
+            onChanged: (value) {
+              setState(() {
+                _backendUrl = value;
               });
             },
           ),
