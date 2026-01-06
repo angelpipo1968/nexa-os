@@ -1,0 +1,313 @@
+/* Futuristic Panel Styles */
+:root {
+  --bg-dark: #0f172a;
+  --glass-bg: rgba(30, 41, 59, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --neon-cyan: #06b6d4;
+  --neon-purple: #7c3aed;
+  --neon-green: #10b981;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+}
+
+.futuristic-container {
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.1) 0%, transparent 40%);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.ambient-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('https://grainy-gradients.vercel.app/noise.svg');
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.transparent-layout {
+  background: transparent !important;
+  z-index: 1;
+}
+
+/* Header */
+.glass-header {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  font-size: 24px;
+  color: var(--neon-cyan);
+  filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.5));
+}
+
+.brand-text {
+  margin: 0 !important;
+  color: var(--text-primary) !important;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.version-tag {
+  font-size: 10px;
+  background: rgba(6, 182, 212, 0.1);
+  color: var(--neon-cyan);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icon-btn {
+  font-size: 20px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 12px 4px 4px;
+  border-radius: 30px;
+  border: 1px solid var(--glass-border);
+}
+
+.user-avatar {
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+}
+
+.username {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.role-tag {
+  border: none;
+  background: rgba(6, 182, 212, 0.2);
+  color: var(--neon-cyan);
+  font-size: 10px;
+  margin-right: 0;
+}
+
+/* Content */
+.main-content {
+  padding: 24px;
+}
+
+/* Hero Section */
+.hero-section {
+  margin-bottom: 40px;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.hero-title {
+  font-size: 3rem !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 16px !important;
+  line-height: 1.1 !important;
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #22d3ee, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 32px;
+  max-width: 600px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.action-btn {
+  height: 48px;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+}
+
+.glow-btn {
+  background: linear-gradient(135deg, var(--neon-cyan), #0891b2);
+  border: none;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+  transition: all 0.3s;
+}
+
+.glow-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+}
+
+.secondary-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+}
+
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Cards */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Status Card */
+.status-card {
+  padding: 20px;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.status-icon {
+  color: var(--neon-green);
+}
+
+.status-item {
+  margin-bottom: 12px;
+}
+
+.status-item span {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+/* Stats */
+.stat-card .ant-statistic-title {
+  color: var(--text-secondary) !important;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-card .ant-statistic-content {
+  color: var(--text-primary) !important;
+}
+
+/* Charts */
+.chart-card .ant-card-head {
+  border-bottom: 1px solid var(--glass-border);
+  color: var(--text-primary);
+}
+
+.chart-card .ant-card-head-title {
+  color: var(--text-primary);
+}
+
+/* Activity List */
+.activity-card .ant-list-item {
+  border-bottom: 1px solid var(--glass-border);
+  padding: 12px 0;
+}
+
+.activity-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 6px;
+}
+
+.dot-green { background: var(--neon-green); box-shadow: 0 0 8px rgba(16, 185, 129, 0.5); }
+.dot-blue { background: var(--neon-cyan); box-shadow: 0 0 8px rgba(6, 182, 212, 0.5); }
+.dot-purple { background: var(--neon-purple); box-shadow: 0 0 8px rgba(124, 58, 237, 0.5); }
+.dot-orange { background: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); }
+
+.activity-title {
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.activity-time {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ant Design Overrides for Dark Mode */
+.ant-progress-bg {
+  height: 6px !important;
+  border-radius: 4px !important;
+}
+
+.ant-progress-inner {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}

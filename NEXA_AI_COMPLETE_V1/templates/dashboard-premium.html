@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexa Dashboard Premium</title>
+  <link rel="stylesheet" href="../assets/css/nexa-core.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/themes.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Segoe+UI&display=swap" rel="stylesheet">
+  <style>
+    .welcome-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+  </style>
+</head>
+<body class="theme-premium">
+  <div class="nexa-container">
+    <aside class="nexa-sidebar">
+      <h2 class="text-accent animate-glow">NEXA AI</h2>
+      <nav>
+        <button class="nexa-btn" style="width: 100%; margin-bottom: 0.5rem; justify-content: flex-start; background: transparent; border: 1px solid var(--border);">📊 Dashboard</button>
+        <button class="nexa-btn" style="width: 100%; margin-bottom: 0.5rem; justify-content: flex-start; background: transparent;">💬 Chat IA</button>
+        <button class="nexa-btn" style="width: 100%; margin-bottom: 0.5rem; justify-content: flex-start; background: transparent;">👁️ VisionForge</button>
+      </nav>
+    </aside>
+
+    <main class="nexa-main">
+      <div class="welcome-header animate-slide-in">
+        <div class="avatar animate-float" style="font-size: 3rem;">🤖</div>
+        <div>
+          <h1>Hola Ángel 👋</h1>
+          <p class="text-muted">Tu portal de inteligencia artificial avanzada</p>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="nexa-card animate-fade-in" style="animation-delay: 0.1s;">
+          <h3>Estado del Sistema</h3>
+          <p class="text-accent">OPERATIVO</p>
+          <div class="code-block">Uptime: 99.9%</div>
+        </div>
+        <div class="nexa-card animate-fade-in" style="animation-delay: 0.2s;">
+          <h3>Modelo Activo</h3>
+          <p>Qwen 3.0 (Optimized)</p>
+          <div class="code-block">Latency: 12ms</div>
+        </div>
+        <div class="nexa-card animate-fade-in" style="animation-delay: 0.3s;">
+          <h3>Tareas Pendientes</h3>
+          <p>3 Procesos en cola</p>
+        </div>
+      </div>
+
+      <div class="nexa-card animate-fade-in" style="margin-top: 2rem; animation-delay: 0.4s;">
+        <h3>🚀 Acciones Rápidas</h3>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <button class="nexa-btn">Nuevo Chat</button>
+          <button class="nexa-btn" style="background: var(--secondary); color: var(--text-dark);">Subir Imagen</button>
+          <button class="nexa-btn" style="background: transparent; border: 1px solid var(--accent);">Configuración</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/nexa-core.js"></script>
+</body>
+</html>

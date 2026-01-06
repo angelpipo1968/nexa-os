@@ -6,6 +6,7 @@ import AndroidApp from './components/AndroidApp/AndroidApp';
 import SettingsPanel from './components/SettingsPanel/SettingsPanel';
 import Toolbar from './components/Toolbar/Toolbar';
 import { useVoiceControl } from './hooks/useVoiceControl';
+import FuturisticPanel from './components/FuturisticPanel/FuturisticPanel';
 import './styles.css';
 
 function App() {

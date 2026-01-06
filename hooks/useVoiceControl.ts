@@ -48,7 +48,13 @@ export function useVoiceControl(language: 'es' | 'en' | 'zh', onInput: (text: st
 
       recognitionRef.current.onerror = (event: any) => {
         setIsListening(false);
-        if (event.error !== 'no-speech') {
+        if (event.error === 'network') {
+            console.warn('Speech recognition network error (offline or blocked).');
+            setError('Modo voz requiere internet (API navegador).');
+        } else if (event.error === 'not-allowed') {
+            console.warn('Speech recognition permission denied.');
+            setError('Permiso de micrófono denegado.');
+        } else if (event.error !== 'no-speech') {
             console.error('Speech error:', event.error);
             setError(`Error de voz: ${ event.error } `);
         }

@@ -1,0 +1,29 @@
+/* Premium Dark Theme (Default) */
+.theme-premium {
+  --primary: #4a4e69;
+  --secondary: #e6e6fa;
+  --accent: #d4af37;
+  --background: #0a0a1a;
+  --text-light: #f8f8f2;
+}
+
+/* Futuristic Theme (formerly Cyberpunk) */
+.theme-futuristic {
+  --primary: #2d00f7;
+  --secondary: #00f6ff;
+  --accent: #ff0055;
+  --background: #050505;
+  --text-light: #ffffff;
+  --border: #00f6ff;
+}
+
+/* Minimalist Theme */
+.theme-minimalist {
+  --primary: #2b2d42;
+  --secondary: #8d99ae;
+  --accent: #ef233c;
+  --background: #ffffff;
+  --text-light: #2b2d42;
+  --text-dark: #000000;
+  --border: #e0e0e0;
+}

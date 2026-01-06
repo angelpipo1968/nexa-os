@@ -1,0 +1,192 @@
+:root { 
+  --primary: #0ff0fc; 
+  --secondary: #9600ff; 
+  --dark: #0a0a1a; 
+  --light: #f8f9fa; 
+  --success: #00ff41; 
+} 
+
+body { 
+  margin: 0; 
+  padding: 0; 
+  font-family: 'Segoe UI', system-ui, sans-serif; 
+  background-color: var(--dark); 
+  color: white; 
+} 
+
+.nexa-container { 
+  display: flex; 
+  min-height: 100vh; 
+} 
+
+.sidebar { 
+  width: 250px; 
+  background: rgba(10, 10, 30, 0.8); 
+  padding: 1rem; 
+  border-right: 1px solid var(--primary); 
+} 
+
+.logo { 
+  font-size: 2rem; 
+  font-weight: bold; 
+  background: linear-gradient(90deg, var(--primary), var(--secondary)); 
+  -webkit-background-clip: text; 
+  background-clip: text; 
+  color: transparent; 
+  margin-bottom: 2rem; 
+  text-align: center; 
+} 
+
+.sidebar button { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+  width: 100%; 
+  padding: 0.75rem; 
+  margin-bottom: 0.5rem; 
+  background: transparent; 
+  border: 1px solid var(--primary); 
+  color: white; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: all 0.3s; 
+} 
+
+.sidebar button:hover { 
+  background: rgba(15, 240, 252, 0.2); 
+} 
+
+.sidebar button.active { 
+  background: var(--primary); 
+  color: var(--dark); 
+} 
+
+.main-content { 
+  flex: 1; 
+  padding: 2rem; 
+} 
+
+.chat-container { 
+  display: flex; 
+  flex-direction: column; 
+  height: 80vh; 
+} 
+
+.robot-container { 
+  display: flex; 
+  align-items: center; 
+  gap: 1rem; 
+  margin-bottom: 1rem; 
+} 
+
+.robot-icon { 
+  width: 50px; 
+  height: 50px; 
+  color: var(--primary); 
+} 
+
+.robot-speech { 
+  padding: 0.75rem 1rem; 
+  background: rgba(15, 240, 252, 0.1); 
+  border: 1px solid var(--primary); 
+  border-radius: 10px; 
+  max-width: 70%; 
+} 
+
+.messages { 
+  flex: 1; 
+  overflow-y: auto; 
+  margin-bottom: 1rem; 
+} 
+
+.message { 
+  padding: 0.75rem 1rem; 
+  margin-bottom: 0.5rem; 
+  border-radius: 10px; 
+  max-width: 80%; 
+} 
+
+.message.user { 
+  background: rgba(15, 240, 252, 0.2); 
+  border: 1px solid var(--primary); 
+  margin-left: auto; 
+} 
+
+.message.bot { 
+  background: rgba(150, 0, 255, 0.2); 
+  border: 1px solid var(--secondary); 
+  margin-right: auto; 
+} 
+
+.input-area { 
+  display: flex; 
+  gap: 0.5rem; 
+} 
+
+.input-area input { 
+  flex: 1; 
+  padding: 0.75rem; 
+  background: rgba(255, 255, 255, 0.1); 
+  border: 1px solid var(--primary); 
+  border-radius: 5px; 
+  color: white; 
+} 
+
+.input-area button { 
+  padding: 0.75rem 1rem; 
+  background: var(--primary); 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+} 
+
+.video-generator, .code-editor, .settings { 
+  background: rgba(20, 20, 50, 0.5); 
+  padding: 1.5rem; 
+  border-radius: 10px; 
+  border: 1px solid var(--secondary); 
+} 
+
+.video-generator textarea, 
+.code-editor textarea { 
+  width: 100%; 
+  min-height: 200px; 
+  margin: 1rem 0; 
+  padding: 0.75rem; 
+  background: rgba(0, 0, 0, 0.5); 
+  border: 1px solid var(--primary); 
+  color: white; 
+  border-radius: 5px; 
+} 
+
+.video-generator button, 
+.code-editor button { 
+  padding: 0.75rem 1.5rem; 
+  background: var(--primary); 
+  border: none; 
+  border-radius: 5px; 
+  color: var(--dark); 
+  cursor: pointer; 
+} 
+
+.setting-item { 
+  margin-bottom: 1rem; 
+} 
+
+.setting-item label { 
+  display: block; 
+  margin-bottom: 0.5rem; 
+} 
+
+.setting-item input[type="range"] { 
+  width: 100%; 
+} 
+
+.setting-item select { 
+  width: 100%; 
+  padding: 0.5rem; 
+  background: rgba(0, 0, 0, 0.5); 
+  border: 1px solid var(--primary); 
+  color: white; 
+  border-radius: 5px; 
+}
