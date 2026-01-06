@@ -6,7 +6,7 @@ import {
   ThunderboltOutlined, 
   SafetyCertificateOutlined,
   WifiOutlined,
-  CpuOutlined,
+  CodeOutlined,
   GlobalOutlined,
   BellOutlined,
   UserOutlined
@@ -110,7 +110,7 @@ const FuturisticPanel = ({ setActiveView }) => {
             {/* Quick Stats */}
             <Col xs={24} sm={12} lg={6}>
               <Card className="stat-card glass-card">
-                <Statistic title="Tokens Generados" value={12584} prefix={<CpuOutlined />} valueStyle={{ color: '#06b6d4' }} />
+                <Statistic title="Tokens Generados" value={12584} prefix={<CodeOutlined />} valueStyle={{ color: '#06b6d4' }} />
               </Card>
             </Col>
             <Col xs={24} sm={12} lg={6}>

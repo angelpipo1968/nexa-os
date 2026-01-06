@@ -80,6 +80,8 @@ function App() {
 
   const renderContent = () => {
     switch (activeView) {
+      case 'dashboard':
+        return <FuturisticPanel setActiveView={setActiveView} />;
       case 'chat':
         return <ChatInterface messages={messages} />;
       case 'logos':
