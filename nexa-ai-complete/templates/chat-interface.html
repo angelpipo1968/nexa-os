@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Nexa Chat Interface</title>
+  <link rel="stylesheet" href="../assets/css/nexa-core.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <style>
+    .chat-container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .chat-message {
+      max-width: 70%;
+      padding: 1rem;
+      border-radius: 12px;
+      position: relative;
+    }
+    .chat-message.user {
+      align-self: flex-end;
+      background: var(--accent);
+      color: var(--text-light);
+    }
+    .chat-message.assistant {
+      align-self: flex-start;
+      background: rgba(40, 42, 54, 0.8);
+      border: 1px solid var(--border);
+    }
+    .input-area {
+      padding: 2rem;
+      background: rgba(0,0,0,0.2);
+      display: flex;
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body class="theme-premium">
+  <div class="chat-container">
+    <header style="padding: 1rem 2rem; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--border);">
+      <h2 style="margin: 0;">💬 Nexa Assistant</h2>
+    </header>
+    
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-message assistant">
+        Hola, soy Nexa. ¿En qué puedo ayudarte hoy?
+      </div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" class="nexa-input" placeholder="Escribe tu mensaje..." style="margin-bottom: 0;">
+      <button class="nexa-btn" onclick="sendMessage()">Enviar</button>
+    </div>
+  </div>
+
+  <script src="../assets/js/nexa-core.js"></script>
+  <script src="../assets/js/chat-engine.js"></script>
+  <script>
+    // Configuración para integración con API
+    const apiConfig = {
+      apiKey: process.env.ANTHROPIC_API_KEY || 'your-api-key-here',
+      endpoint: '/api/proxy/anthropic', // Usa nuestro proxy local
+      model: 'claude-3-5-sonnet-20240620' // Último modelo disponible
+    };
+
+    const chat = new ChatEngine('#chatMessages', apiConfig);
+    
+    function sendMessage() {
+      const input = document.querySelector('input');
+      if (input.value.trim()) {
+        chat.sendMessage(input.value);
+        input.value = '';
+      }
+    }
+
+    document.querySelector('input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+</body>
+</html>

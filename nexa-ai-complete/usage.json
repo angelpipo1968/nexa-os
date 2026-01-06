@@ -1,0 +1,60 @@
+{
+  "history": [
+    {
+      "timestamp": "2026-01-06T03:15:03.632Z",
+      "provider": "local-ai",
+      "model": "local-model",
+      "input_tokens": 41,
+      "output_tokens": 28,
+      "total_tokens": 69
+    },
+    {
+      "timestamp": "2026-01-06T03:16:51.066Z",
+      "provider": "local-ai",
+      "model": "local-model",
+      "input_tokens": 48,
+      "output_tokens": 146,
+      "total_tokens": 194
+    },
+    {
+      "timestamp": "2026-01-06T03:23:44.818Z",
+      "provider": "local-ai",
+      "model": "local-model",
+      "input_tokens": 41,
+      "output_tokens": 527,
+      "total_tokens": 568
+    },
+    {
+      "timestamp": "2026-01-06T03:24:36.146Z",
+      "provider": "local-ai",
+      "model": "local-model",
+      "input_tokens": 0,
+      "output_tokens": 1571,
+      "total_tokens": 1571
+    },
+    {
+      "timestamp": "2026-01-06T04:56:36.601Z",
+      "provider": "local-ai",
+      "model": "local-model",
+      "input_tokens": 542,
+      "output_tokens": 452,
+      "total_tokens": 994
+    },
+    {
+      "timestamp": "2026-01-06T04:59:58.319Z",
+      "provider": "local-ai",
+      "model": "local-model",
+      "input_tokens": 48,
+      "output_tokens": 491,
+      "total_tokens": 539
+    }
+  ],
+  "summary": {
+    "local-ai": {
+      "input": 720,
+      "output": 3215,
+      "total": 3935,
+      "requests": 6
+    }
+  }
+}

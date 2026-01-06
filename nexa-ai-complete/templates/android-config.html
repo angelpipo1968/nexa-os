@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Configuración Android</title>
+  <link rel="stylesheet" href="../assets/css/nexa-core.css">
+</head>
+<body class="theme-premium">
+  <div class="nexa-main">
+    <h1>📱 Configuración Qwen3 para Android</h1>
+    
+    <div class="nexa-card">
+      <p class="text-muted">Genera el archivo de configuración JSON para tu despliegue en Android.</p>
+      
+      <form id="androidForm">
+        <label>ID del Dispositivo</label>
+        <input type="text" class="nexa-input" placeholder="e.g., Pixel_7_Pro_01">
+        
+        <label>Límite de Memoria (RAM)</label>
+        <select class="nexa-input">
+          <option>4GB (Low)</option>
+          <option selected>8GB (Standard)</option>
+          <option>12GB+ (High Performance)</option>
+        </select>
+        
+        <label>Modelo Cuantizado</label>
+        <select class="nexa-input">
+          <option>Qwen-7B-Int4</option>
+          <option>Qwen-14B-Int4</option>
+        </select>
+
+        <div style="margin-bottom: 1rem;">
+          <input type="checkbox" id="offline" checked>
+          <label for="offline">Modo Offline (Sin conexión a servidor)</label>
+        </div>
+
+        <button type="button" class="nexa-btn" onclick="exportConfig()">Exportar JSON</button>
+      </form>
+    </div>
+
+    <div class="code-block" id="jsonOutput" style="display: none;"></div>
+  </div>
+
+  <script src="../assets/js/nexa-core.js"></script>
+  <script>
+    function exportConfig() {
+      const config = {
+        deviceId: document.querySelector('input[type="text"]').value,
+        memory: document.querySelector('select').value,
+        model: document.querySelectorAll('select')[1].value,
+        offlineMode: document.getElementById('offline').checked,
+        timestamp: new Date().toISOString()
+      };
+      
+      const output = document.getElementById('jsonOutput');
+      output.style.display = 'block';
+      output.innerText = JSON.stringify(config, null, 2);
+    }
+  </script>
+</body>
+</html>

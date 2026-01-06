@@ -1,0 +1,15 @@
+{
+  "name": "nexa-global-gateway",
+  "version": "1.0.0",
+  "description": "Global Gateway for Nexa AI with Geolocation Load Balancing",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "geoip-lite": "^1.4.7",
+    "cassandra-driver": "^4.6.4"
+  }
+}

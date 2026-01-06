@@ -178,65 +178,70 @@ export default function NEXACompleteSetup() {
   const [error, setError] = useState('');
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState('');
-  const [config, setConfig] = useState(DEFAULT_CONFIG);
+  // Inicializar configuración desde localStorage (Lazy init)
+  const [config, setConfig] = useState(() => {
+    if (typeof window !== 'undefined') {
+        const storedConfig = localStorage.getItem('nexa_supabase_config');
+        if (storedConfig) {
+            return JSON.parse(storedConfig);
+        }
+    }
+    return DEFAULT_CONFIG;
+  });
+
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [conversationId, setConversationId] = useState<string | null>(null);
   
   // Referencia al cliente supabase
   const supabaseRef = useRef<SimpleSupabaseClient | null>(null);
 
-  // Inicializar configuración desde localStorage si existe
+  // Inicializar Supabase y verificar OAuth
   useEffect(() => {
-    const storedConfig = localStorage.getItem('nexa_supabase_config');
-    if (storedConfig) {
-      const parsed = JSON.parse(storedConfig);
-      setConfig(parsed);
-      // Si parece válida, instanciar cliente
-      if (!parsed.url.includes('tu-proyecto')) {
-        supabaseRef.current = new SimpleSupabaseClient(parsed.url, parsed.anonKey);
+      // Instanciar cliente si la config es válida
+      if (!config.url.includes('tu-proyecto')) {
+        supabaseRef.current = new SimpleSupabaseClient(config.url, config.anonKey);
 
-        // Verificar hash para OAuth callback
-        const hash = window.location.hash;
-        if (hash && hash.includes('access_token')) {
-            const params = new URLSearchParams(hash.substring(1));
-            const accessToken = params.get('access_token');
-            if (accessToken && supabaseRef.current) {
-                supabaseRef.current.auth.getUser(accessToken).then(({ user }) => {
-                    if (user) {
-                        setUser(user);
-                        setCurrentView('chat');
-                        initializeChat(user.id);
-                        window.history.replaceState(null, '', window.location.pathname);
-                    }
-                });
+        // Verificar hash para OAuth callback (solo en cliente)
+        if (typeof window !== 'undefined') {
+            const hash = window.location.hash;
+            if (hash && hash.includes('access_token')) {
+                const params = new URLSearchParams(hash.substring(1));
+                const accessToken = params.get('access_token');
+                if (accessToken && supabaseRef.current) {
+                    supabaseRef.current.auth.getUser(accessToken).then(({ user }) => {
+                        if (user) {
+                            setUser(user);
+                            setCurrentView('chat');
+                            initializeChat(user.id);
+                            window.history.replaceState(null, '', window.location.pathname);
+                        }
+                    });
+                }
             }
         }
       }
-    }
-  }, []);
+  }, [config]); // Re-run if config changes
 
   // Verificar configuración
   const isConfigured = !config.url.includes('tu-proyecto') && 
                        !config.anonKey.includes('tu-anon-key') && 
-                       !config.url.includes('nexa-ai.dev.supabase.co'); // Evitar URL de ejemplo rota
+                       !config.url.includes('nexa-ai.dev.supabase.co');
 
-  // Simulación de base de datos local (fallback)
-  const [localDB, setLocalDB] = useState({
-    users: [] as any[],
-    conversations: [] as any[],
-    messages: [] as any[]
-  });
-
-  // Cargar datos locales al inicio
-  useEffect(() => {
+  // Simulación de base de datos local (fallback) con Lazy Init
+  const [localDB, setLocalDB] = useState(() => {
     if (typeof window !== 'undefined') {
-      setLocalDB({
-        users: JSON.parse(localStorage.getItem('nexa_users') || '[]'),
-        conversations: JSON.parse(localStorage.getItem('nexa_conversations') || '[]'),
-        messages: JSON.parse(localStorage.getItem('nexa_messages') || '[]')
-      });
+        return {
+            users: JSON.parse(localStorage.getItem('nexa_users') || '[]'),
+            conversations: JSON.parse(localStorage.getItem('nexa_conversations') || '[]'),
+            messages: JSON.parse(localStorage.getItem('nexa_messages') || '[]')
+        };
     }
-  }, []);
+    return {
+        users: [] as any[],
+        conversations: [] as any[],
+        messages: [] as any[]
+    };
+  });
 
   const saveToLocal = (key: string, data: any) => {
     localStorage.setItem(key, JSON.stringify(data));

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Nexa Logo Generator</title>
+  <link rel="stylesheet" href="../assets/css/nexa-core.css">
+  <style>
+    .canvas-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0,0,0,0.2);
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+    canvas {
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+  </style>
+</head>
+<body class="theme-premium">
+  <div class="nexa-main">
+    <h1>🎨 Generador de Logos</h1>
+    
+    <div class="nexa-card">
+      <div class="canvas-container">
+        <canvas id="logoCanvas" width="400" height="400"></canvas>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+          <label>Texto Principal</label>
+          <input type="text" class="nexa-input" id="logoText" value="NEXA">
+        </div>
+        <div>
+          <label>Color de Acento</label>
+          <input type="color" class="nexa-input" id="accentColor" value="#d4af37" style="height: 50px;">
+        </div>
+      </div>
+      
+      <button class="nexa-btn" onclick="generateLogo()">Generar Logo</button>
+      <button class="nexa-btn" onclick="downloadLogo()" style="background: var(--secondary); color: var(--text-dark);">Descargar PNG</button>
+    </div>
+  </div>
+
+  <script src="../assets/js/nexa-core.js"></script>
+  <script>
+    function generateLogo() {
+      const canvas = document.getElementById('logoCanvas');
+      const ctx = canvas.getContext('2d');
+      const text = document.getElementById('logoText').value;
+      const color = document.getElementById('accentColor').value;
+
+      // Clear
+      ctx.fillStyle = '#0a0a1a';
+      ctx.fillRect(0, 0, 400, 400);
+
+      // Draw Circle
+      ctx.beginPath();
+      ctx.arc(200, 200, 150, 0, 2 * Math.PI);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 10;
+      ctx.stroke();
+
+      // Draw Text
+      ctx.font = 'bold 80px "Segoe UI"';
+      ctx.fillStyle = '#f8f8f2';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, 200, 200);
+
+      // Glow effect
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 20;
+    }
+
+    function downloadLogo() {
+      const link = document.createElement('a');
+      link.download = 'nexa-logo.png';
+      link.href = document.getElementById('logoCanvas').toDataURL();
+      link.click();
+    }
+
+    // Init
+    window.onload = generateLogo;
+  </script>
+</body>
+</html>

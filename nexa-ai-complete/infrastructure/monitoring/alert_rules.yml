@@ -1,0 +1,29 @@
+groups:
+- name: NEXA_Alerts
+  rules:
+  - alert: HighChatLatency
+    expr: avg_over_time(chat_response_latency_seconds{job="chat_service"}[5m]) > 2
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High latency in Chat Service"
+      description: "Chat service latency is above 2s for more than 10 minutes."
+
+  - alert: CrawlerFailureRateHigh
+    expr: rate(crawler_errors_total[5m]) / rate(crawler_requests_total[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High Crawler Failure Rate"
+      description: "More than 10% of crawl requests are failing."
+
+  - alert: GatewayRegionDown
+    expr: up{job="gateway_node"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Gateway Node Down"
+      description: "A gateway node in region {{ $labels.region }} is down."

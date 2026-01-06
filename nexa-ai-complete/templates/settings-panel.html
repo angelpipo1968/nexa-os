@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel de Configuración</title>
+  <link rel="stylesheet" href="../assets/css/nexa-core.css">
+</head>
+<body class="theme-premium">
+  <div class="nexa-main">
+    <h1>⚙️ Configuración del Sistema</h1>
+    
+    <div class="nexa-card">
+      <h3>Apariencia</h3>
+      <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+        <button class="nexa-btn" onclick="setTheme('premium')">Premium (Default)</button>
+        <button class="nexa-btn" style="background: #2d00f7;" onclick="setTheme('cyberpunk')">Cyberpunk</button>
+        <button class="nexa-btn" style="background: #edf2f4; color: #333;" onclick="setTheme('minimal')">Minimal</button>
+      </div>
+    </div>
+
+    <div class="nexa-card">
+      <h3>Notificaciones</h3>
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <label><input type="checkbox" checked> Alertas de Sistema</label>
+        <label><input type="checkbox" checked> Finalización de Tareas</label>
+        <label><input type="checkbox"> Actualizaciones Beta</label>
+      </div>
+    </div>
+
+    <div class="nexa-card">
+      <h3>API Keys</h3>
+      <input type="password" class="nexa-input" value="sk-xxxxxxxxxxxxxxxx">
+      <button class="nexa-btn">Regenerar Llaves</button>
+    </div>
+  </div>
+
+  <script src="../assets/js/nexa-core.js"></script>
+  <script>
+    function setTheme(theme) {
+      document.body.className = `theme-${theme}`;
+    }
+  </script>
+</body>
+</html>
