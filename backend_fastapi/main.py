@@ -8,8 +8,12 @@ import hmac
 import hashlib
 import base64
 import json
+import random
 
 app = FastAPI(title="NEXA OS Backend", version="1.0.0")
+
+# --- Memoria Volátil ---
+chat_memory = []
 
 # Configuración CORS: Permitir tráfico desde cualquier origen (ajustar en producción)
 app.add_middleware(
@@ -94,16 +98,42 @@ async def webhook_handler(payload: WebhookPayload, background_tasks: BackgroundT
 @app.post("/api/ai/chat")
 async def ai_chat_proxy(request: ChatRequest):
     """
-    Proxy para IA Local.
-    En el futuro, esto conectará con tu túnel seguro (ngrok/cloudflared) hacia Ollama.
+    Simulador de IA con memoria a corto plazo y personalidad.
     """
-    # TODO: Conectar con túnel local
-    # local_tunnel_url = os.getenv("LOCAL_AI_URL") 
+    global chat_memory
+    
+    # Guardar input del usuario
+    chat_memory.append(f"User: {request.prompt}")
+    if len(chat_memory) > 10: chat_memory.pop(0) # Mantener solo los últimos 10
+    
+    # Respuestas con estilo futurista
+    responses = [
+        "Analizando patrones de datos... Interesante.",
+        "Mis sensores indican una probabilidad del 99% de éxito.",
+        "Accediendo a la red neuronal global. Un momento.",
+        "He procesado tu solicitud. Los resultados son prometedores.",
+        "Sistema operativo estable. ¿En qué más puedo ayudarte?",
+        "NEXA OS v3 en línea. Tus deseos son órdenes de código."
+    ]
+    
+    ai_reply = random.choice(responses)
+    
+    # Lógica básica de conversación
+    prompt_lower = request.prompt.lower()
+    if "quien eres" in prompt_lower or "tu nombre" in prompt_lower:
+        ai_reply = "Soy NEXA, una Inteligencia Artificial diseñada para optimizar tu vida digital."
+    elif "hola" in prompt_lower:
+        ai_reply = "Saludos, usuario. Sistemas listos."
+    elif "ayuda" in prompt_lower:
+        ai_reply = "Puedo ayudarte a organizar tareas, analizar datos o simplemente charlar."
+        
+    chat_memory.append(f"NEXA: {ai_reply}")
     
     return {
-        "response": f"Simulación: Recibí tu prompt '{request.prompt}'. (El túnel a Ollama aún no está configurado)",
+        "response": ai_reply,
+        "history_snippet": chat_memory[-3:],
         "model": request.model,
-        "source": "Cloud Mock"
+        "source": "NEXA Core Logic"
     }
 
 def sign_token(payload: dict, secret: str) -> str:

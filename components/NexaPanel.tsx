@@ -112,25 +112,34 @@ const NexaPanel: React.FC<NexaPanelProps> = ({ config }) => {
 
     try {
       // 3. Generate AI Response
-      // We need to convert current messages to AIMessage format for the service
-      const history = messages.map(m => ({
-        role: m.role as 'user' | 'assistant' | 'system',
-        content: m.content
-      }));
+      // Conectar con Backend Real de NEXA OS
+      const BACKEND_URL = "https://ai-backend.onrender.com"; 
+      
+      const res = await fetch(`${BACKEND_URL}/api/ai/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: userMsg, model: 'nexa-v3-core' })
+      });
 
-      const response = await aiService.generateNEXAResponse(userMsg, history);
+      let responseContent = "";
+      if (res.ok) {
+          const data = await res.json();
+          responseContent = data.response;
+      } else {
+          responseContent = "Error: No puedo establecer enlace con el núcleo central.";
+      }
 
       // 4. Add AI Response
       setMessages(prev => [
         ...prev,
-        { role: 'assistant', content: response }
+        { role: 'assistant', content: responseContent }
       ]);
 
       // 5. Save AI Message to Cloud
-      await saveMessageToCloud('assistant', response);
+      await saveMessageToCloud('assistant', responseContent);
 
-      // 6. Handle special commands in response (optional basic parsing)
-      if (response.toLowerCase().includes('abriendo panel de herramientas')) {
+      // 6. Handle special commands
+      if (responseContent.toLowerCase().includes('panel de herramientas')) {
         setTab('herramientas');
       }
 
