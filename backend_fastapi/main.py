@@ -9,10 +9,37 @@ import hashlib
 import base64
 import json
 import random
+import sqlite3
 
 app = FastAPI(title="NEXA OS Backend", version="1.0.0")
 
-# --- Memoria Volátil ---
+# --- Base de Datos SQLite (Local) ---
+DB_NAME = "nexa_local.db"
+
+def init_db():
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        c = conn.cursor()
+        # Tabla de usuarios (simple)
+        c.execute('''CREATE TABLE IF NOT EXISTS users 
+                     (email TEXT PRIMARY KEY, phone TEXT, created_at TEXT)''')
+        # Tabla de mensajes
+        c.execute('''CREATE TABLE IF NOT EXISTS messages 
+                     (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                      user_identifier TEXT, 
+                      role TEXT, 
+                      content TEXT, 
+                      timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)''')
+        conn.commit()
+        conn.close()
+        print(f"Base de datos {DB_NAME} inicializada correctamente.")
+    except Exception as e:
+        print(f"Error inicializando BD: {e}")
+
+# Inicializar DB al arrancar
+init_db()
+
+# --- Memoria Volátil (Backup rápido) ---
 chat_memory = []
 
 # Configuración CORS: Permitir tráfico desde cualquier origen (ajustar en producción)
@@ -129,6 +156,18 @@ async def ai_chat_proxy(request: ChatRequest):
         
     chat_memory.append(f"NEXA: {ai_reply}")
     
+    # --- Guardar en Base de Datos Local (SQLite) ---
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        c = conn.cursor()
+        c.execute("INSERT INTO messages (role, content) VALUES (?, ?)", ('user', request.prompt))
+        c.execute("INSERT INTO messages (role, content) VALUES (?, ?)", ('assistant', ai_reply))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Error guardando en BD local: {e}")
+    # -----------------------------------------------
+    
     return {
         "response": ai_reply,
         "history_snippet": chat_memory[-3:],
@@ -150,6 +189,18 @@ def sign_token(payload: dict, secret: str) -> str:
 async def register(req: RegisterRequest):
     if not req.email and not req.phone:
         raise HTTPException(status_code=400, detail="email_or_phone_required")
+    
+    # Guardar usuario en SQLite
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        c = conn.cursor()
+        c.execute("INSERT OR IGNORE INTO users (email, phone, created_at) VALUES (?, ?, ?)", 
+                  (req.email, req.phone, datetime.datetime.utcnow().isoformat()))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Error registrando usuario en BD: {e}")
+
     now = int(datetime.datetime.utcnow().timestamp())
     exp = now + 7 * 24 * 3600
     secret = os.getenv("AUTH_SECRET", "change_me")
