@@ -4,6 +4,10 @@ from pydantic import BaseModel
 import httpx
 import os
 import datetime
+import hmac
+import hashlib
+import base64
+import json
 
 app = FastAPI(title="NEXA OS Backend", version="1.0.0")
 
@@ -25,6 +29,10 @@ class WebhookPayload(BaseModel):
 class ChatRequest(BaseModel):
     prompt: str
     model: str = "qwen:0.5b"
+
+class RegisterRequest(BaseModel):
+    email: str | None = None
+    phone: str | None = None
 
 # --- Funciones Auxiliares ---
 async def send_discord_notification(message: str):
@@ -97,6 +105,28 @@ async def ai_chat_proxy(request: ChatRequest):
         "model": request.model,
         "source": "Cloud Mock"
     }
+
+def sign_token(payload: dict, secret: str) -> str:
+    header = {"alg": "HS256", "typ": "JWT"}
+    b64 = lambda obj: base64.urlsafe_b64encode(json.dumps(obj).encode()).rstrip(b"=").decode()
+    h = b64(header)
+    p = b64(payload)
+    msg = f"{h}.{p}".encode()
+    sig = hmac.new(secret.encode(), msg, hashlib.sha256).digest()
+    s = base64.urlsafe_b64encode(sig).rstrip(b"=").decode()
+    return f"{h}.{p}.{s}"
+
+@app.post("/api/auth/register")
+async def register(req: RegisterRequest):
+    if not req.email and not req.phone:
+        raise HTTPException(status_code=400, detail="email_or_phone_required")
+    now = int(datetime.datetime.utcnow().timestamp())
+    exp = now + 7 * 24 * 3600
+    secret = os.getenv("AUTH_SECRET", "change_me")
+    subject = (req.email or req.phone or "user").lower()
+    payload = {"sub": subject, "email": req.email, "phone": req.phone, "iat": now, "exp": exp}
+    token = sign_token(payload, secret)
+    return {"token": token, "expires": exp, "user": {"email": req.email, "phone": req.phone}}
 
 if __name__ == "__main__":
     import uvicorn

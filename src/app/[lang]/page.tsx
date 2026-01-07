@@ -1,11 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// Ajustamos las importaciones asumiendo que components sigue en la raíz por ahora
-// O idealmente moveremos components a src/components más tarde.
-// Usamos rutas relativas profundas para llegar a la raíz.
-import NexaPanel from '../../../../components/NexaPanel';
-import '../../../../app/nexa-panel.css'; // Reutilizamos el CSS existente
+// Importaciones corregidas
+import NexaPanel from '../../../components/NexaPanel';
+import '../nexa-panel.css'; // Ruta relativa a src/app/nexa-panel.css
 import { Bot, Zap, Globe, MessageSquare, Mic, Shield, Menu, X, ArrowRight, Check } from 'lucide-react';
 
 // --- CONFIGURACIÓN & TEXTOS ---
@@ -69,6 +67,9 @@ const TRANSLATIONS = {
   }
 };
 
+// URL del Backend para conexión directa (necesario para APK/Móvil)
+const BACKEND_URL = "https://ai-backend.onrender.com";
+
 export default function Page({ params }: { params: { lang: string } }) {
   // Validar idioma, fallback a 'es'
   const langKey = (['es', 'en', 'zh'].includes(params.lang) ? params.lang : 'es') as keyof typeof TRANSLATIONS;
@@ -78,14 +79,14 @@ export default function Page({ params }: { params: { lang: string } }) {
   const [systemStatus, setSystemStatus] = useState<'checking' | 'online' | 'offline'>('checking');
   const [geoInfo, setGeoInfo] = useState<string>('');
 
-  const t = TRANSLATIONS[langKey];
+  const t: any = TRANSLATIONS[langKey];
 
   // 1. Verificar conexión con el Backend al iniciar
   useEffect(() => {
     const checkSystem = async () => {
       try {
-        // Usamos el proxy de Vercel (/api/py/...) que redirige a Render
-        const res = await fetch('/api/py/geo'); 
+        // Usamos URL absoluta para asegurar compatibilidad con Móvil/APK
+        const res = await fetch(`${BACKEND_URL}/api/geo`); 
         if (res.ok) {
           const data = await res.json();
           setSystemStatus('online');
@@ -101,25 +102,47 @@ export default function Page({ params }: { params: { lang: string } }) {
     checkSystem();
   }, []);
 
-  // 2. Enviar datos reales al Backend (Webhook)
+  // 2. Autenticación Real (Stateless)
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await fetch('/api/py/webhook', {
+      // Llamamos al endpoint de registro del Backend
+      const res = await fetch(`${BACKEND_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          event: 'user_login_attempt',
-          data: { email: formData.email, timestamp: new Date().toISOString() },
-          source: 'nexa-web-ui'
+          email: formData.email || undefined,
+          phone: formData.phone || undefined
         })
       });
-      console.log("Login signal sent to Core");
+
+      if (res.ok) {
+        const data = await res.json();
+        // Guardamos el token de sesión (JWT)
+        localStorage.setItem('nexa_token', data.token);
+        localStorage.setItem('nexa_user', JSON.stringify(data.user));
+        console.log("Login successful, token stored.");
+        
+        // Notificamos evento al sistema (opcional)
+        await fetch(`${BACKEND_URL}/api/webhook`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              event: 'user_login_success',
+              data: { email: formData.email, timestamp: new Date().toISOString() },
+              source: 'nexa-mobile-app'
+            })
+        }).catch(() => {}); // Ignorar error en webhook secundario
+
+        setView('dashboard');
+      } else {
+        console.error("Login failed");
+        alert("Error al iniciar sesión. Verifica tus datos.");
+      }
     } catch (err) {
-      console.error("Failed to signal core:", err);
+      console.error("Connection error:", err);
+      alert("No se pudo conectar con el servidor.");
     }
-    // Continuar al dashboard independientemente (para no bloquear al usuario)
-    setView('dashboard');
   };
 
   // Render Dashboard (NexaPanel existente)
